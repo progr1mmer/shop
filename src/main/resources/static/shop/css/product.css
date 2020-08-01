@@ -1,0 +1,124 @@
+@charset "utf-8";
+
+.carousel-control.left, .carousel-control.right {
+    background-image: unset;
+}
+
+.image {
+    padding-top: 55px;
+}
+
+.row {
+    background-color: #f5f5f5;
+}
+
+.row > div {
+    float: left;
+    width: 100%;
+    background-color: #ffffff;
+}
+
+.col-xs-12 {
+    margin-top: 10px;
+}
+
+.col-xs-12::after {
+    content: "";
+    float: left;
+    width: 100%;
+    padding-top: 10px;
+    border-bottom: 1px solid #dddddd;
+}
+
+.basic .price > span {
+    color: #ef0101;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.basic .promotion > a {
+    padding: 1px 2px;
+    color: #ffffff;
+    background-color: #f07373;
+}
+
+.basic .name {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.basic .sn {
+    padding-top: 10px;
+}
+
+.action {
+    border-radius: 0 0 12px 12px;
+}
+
+.action .col-xs-12::after {
+    border-bottom: unset;
+}
+
+.action .specification dl {
+    margin-bottom: 0;
+}
+
+.action .specification dt {
+    padding-bottom: 5px;
+}
+
+.action .specification dd {
+    display: inline-block;
+}
+
+.action .specification dd a {
+    position: relative;
+    display: inline-block;
+    border: 1px solid #f5f5f5;
+    background-color: #f5f5f5;
+    padding: 3px 12px;
+    border-radius: 8px;
+    font-size: 13px;
+    margin: 0 8px 8px 0;
+    color: #555;
+    line-height: 24px;
+    text-align: center;
+}
+
+.action .specification .selected {
+    border-color: #FF0036;
+    color: #FF0036;
+    background-color: #FFF5F7;
+}
+
+.action .specification .locked {
+    color: #cfcfcf;
+}
+
+.action .buy {
+    float: left;
+    width: 100%;
+    padding: 10px 0;
+}
+
+.action .buy button {
+    width: 100%;
+}
+
+.parameter, .introduction  {
+    background-color: #ffffff;
+    border-radius: 12px;
+    margin-top: 10px;
+}
+
+.introduction {
+    margin-bottom: 10px;
+}
+
+.parameter .col-xs-12::after, .introduction .col-xs-12::after {
+    border-bottom: unset;
+}
+
+.parameter .group {
+    border-top: unset;
+}

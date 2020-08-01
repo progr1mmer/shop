@@ -1,0 +1,587 @@
+@charset "utf-8";
+
+/* ---------- Index ---------- */
+
+div.index .slider {
+	width: 808px;
+	height: 420px;
+	margin-bottom: 10px;
+	overflow: hidden;
+	position: relative;
+}
+
+div.index .slider img {
+	width: 808px;
+	height: 420px;
+	position: absolute;
+	top: 0px;
+	left: 0px;
+}
+
+div.index .newArticle {
+	width: 300px;
+	height: 420px;
+	margin-bottom: 10px;
+	overflow: hidden;
+}
+
+div.index .easyLife {
+	width: 232px;
+	height: 358px;
+}
+
+div.index .easyLife .backGround {
+	margin-top: 28px;
+	width: 232px;
+	height: 330px;
+	background-image: url(../images/easyBackground.jpg);	
+
+}
+
+div.index .easyLife .detail {
+	width: 77px;
+	height: 80px;
+	float: left;
+}
+
+div.index .easyLife .detail img {
+	margin-left: 15px;
+}
+
+div.index .easyLife .detail a {
+	margin-left: 15px;
+	text-align: center;
+}
+
+div.index .easyLife .util {
+	width: 232px;
+	height: 65px;
+
+}
+
+div.index .newArticle .tab {
+	width: 300px;
+	height: 30px;
+	background-color: #f1f1f1;
+}
+
+div.index .newArticle .tab li {
+	width: 76px;
+	height: 30px;
+	line-height: 30px;
+	float: left;
+	text-align: center;
+	overflow: hidden;
+	border-right: solid 1px #e4e4e4;
+}
+
+div.index .newArticle .tab li.current {
+	background-color: #ffffff;
+}
+
+div.index .newArticle .tabContent {
+	padding: 6px;
+}
+
+div.index .newArticle .tabContent li {
+	line-height: 26px;
+}
+
+div.index .hotBrand {
+	padding: 0px 10px 10px 10px;
+	background-color: #f1f1f1;
+}
+
+div.index .hotBrand .title {
+	height: 30px;
+	line-height: 30px;
+	color: #cacaca;
+	font-weight: bold;
+	font-family: "Microsoft YaHei";
+}
+
+div.index .hotBrand .title strong {
+	margin-right: 10px;
+	color: #d31c31;
+	font-size: 14px;
+	font-weight: bold;
+}
+
+div.index .hotBrand .title a {
+	float: right;
+	color: #999999;
+	font-weight: normal;
+}
+
+div.index .hotBrand li {
+	white-space: nowrap;
+	float: left;
+	margin-right: -1px;
+	margin-bottom: -1px;
+	_position: relative;
+	border: 1px solid #e4e4e4;
+	background-color: #ffffff;
+}
+
+div.index .hotBrand li a {
+	width: 97px;
+	height: 50px;
+	display: block;
+	overflow: hidden;
+	background: url(../images/index.gif) 0px 0px repeat-x;
+}
+
+div.index .hotBrand li a:hover {
+	height: 49px;
+	border-bottom: 1px solid #656565;
+}
+
+div.index .hotBrand li img {
+	width: 97px;
+	height: 50px;
+}
+
+div.index .hotProductCategory {
+	padding: 0px 10px 10px 10px;
+	margin-bottom: 10px;
+	background-color: #f1f1f1;
+}
+
+div.index .hotProductCategory .title {
+	height: 30px;
+	line-height: 30px;
+	color: #cacaca;
+	font-weight: bold;
+	font-family: "Microsoft YaHei";
+}
+
+div.index .hotProductCategory .title strong {
+	margin-right: 10px;
+	color: #d31c31;
+	font-size: 14px;
+	font-weight: bold;
+}
+
+div.index .hotProductCategory .title a {
+	float: right;
+	color: #999999;
+	font-weight: normal;
+}
+
+div.index .hotProductCategory .content {
+	border: 1px solid #e4e4e4;
+	background-color: #ffffff;
+}
+
+div.index .hotProductCategory table {
+	width: 100%;
+}
+
+div.index .hotProductCategory tr {
+	border-bottom: 1px solid #f1f1f1;
+}
+
+div.index .hotProductCategory tr.last {
+	border-bottom: none;
+}
+
+div.index .hotProductCategory th {
+	width: 90px;
+	height: 60px;
+	font-weight: normal;
+	text-align: center;
+	white-space: nowrap;
+	border: 3px solid #ffffff;
+	background-color: #f8f8f8;
+}
+
+div.index .hotProductCategory tr:hover th {
+	background-color: #e4e4e4;
+}
+
+@media screen and (-webkit-min-device-pixel-ratio:0){
+	div.index .hotProductCategory th {
+		height: 60px;
+	}
+}
+
+div.index .hotProductCategory td a {
+	line-height: 30px;
+	padding: 0px 10px;
+	color: #666666;
+	white-space: nowrap;
+}
+
+div.index .promotionProduct {
+	width: 818px;
+	margin-bottom: 10px;
+	overflow: hidden;
+	margin-right: 30px;
+	float:left;
+}
+
+div.index .promotionProduct .tab {
+	width: 300px;
+	height: 31px;
+}
+
+div.index .promotionProduct .tab li {
+	width: 114px;
+	height: 31px;
+	line-height: 31px;
+	float: left;
+	text-align: center;
+	overflow: hidden;
+	border-right: solid 1px #e4e4e4;
+	background: url(../images/index.gif) 0px -90px repeat-x;
+}
+
+div.index .promotionProduct .tab li.current {
+	height: 29px;
+	line-height: 29px;
+	border-top: solid 2px #ff830f;
+	background-color: #ffffff;
+	background-image: none;
+}
+
+div.index .promotionProduct .tabContent {
+	width: 818px;
+}
+
+div.index .promotionProduct .tabContent li {
+	line-height: 26px;
+	padding-bottom: 14px;
+	margin-bottom: 14px;
+
+	float:left;
+}
+
+div.index .promotionProduct .tabContent li.last {
+	padding-bottom: 0px;
+	margin-bottom: 0px;
+	border-bottom: none;
+}
+
+div.index .promotionProduct .info {
+	line-height: 26px;
+	color: #a5a5a5;
+}
+
+div.index .promotionProduct .info strong {
+	color: #404040;
+	font-weight: bold;
+}
+
+div.index .promotionProduct .product {
+	height: 165px;
+	width: 400px;
+	clear: both;
+	overflow: hidden;
+	white-space: nowrap;
+	float:left;
+	margin-right: 8px;
+}
+
+div.index .promotionProduct .product img {
+	width: 400px;
+	height: 160px;
+	display: block;
+	float: left;
+	padding: 5px;
+	margin-right: 10px;
+}
+
+div.index .promotionProduct .product del {
+	color: #a5a5a5;
+	font-weight: normal;
+	font-style: normal;
+	text-decoration: line-through;
+}
+
+div.index .promotionProduct strong {
+	line-height: 23px;
+	color: #ff0000;
+	font-weight: bold;
+	font-size: 14px;
+}
+
+div.index .newReview {
+	margin-bottom: 10px;
+	overflow: hidden;
+	border: solid 1px #e4e4e4;
+}
+
+div.index .newReview .title {
+	height: 30px;
+	line-height: 30px;
+	padding: 0px 10px;
+	color: #d31c31;
+	font-size: 14px;
+	font-weight: bold;
+	font-family: "Microsoft YaHei";
+	background-color: #f1f1f1;
+}
+
+div.index .newReview li {
+	line-height: 27px;
+	padding: 0px 6px;
+}
+
+div.index .middleAd {
+	margin-bottom: 10px;
+}
+
+div.index .hotProduct {
+	width: 900px;
+	margin-bottom: 10px;
+}
+
+div.index .hotProduct .title {
+	width: 260px;
+	height: 40px;
+	float: left;
+	margin-bottom: 10px;
+	background: url(../images/index.gif) 0px -150px no-repeat;
+}
+
+div.index .hotProduct .title strong {
+	line-height: 38px;
+	display: block;
+	float: left;
+	padding-left: 10px;
+	color: #ffffff;
+	font-size: 16px;
+	font-family: "Microsoft YaHei";
+}
+
+div.index .hotProduct .title a {
+	width: 40px;
+	height: 40px;
+	display: block;
+	float: right;
+}
+
+div.index .hotProduct .tab {
+	width: 690px;
+	height: 40px;
+	line-height: 40px;
+	float: left;
+	margin-bottom: 10px;
+	overflow: hidden;
+	background: url(../images/index.gif) 0px -210px repeat-x;
+}
+
+div.index .hotProduct .tab li {
+	width: 120px;
+	height: 36px;
+	line-height: 36px;
+	float: left;
+	margin-top: 2px;
+	font-size: 14px;
+	text-align: center;
+	overflow: hidden;
+	border-right: 1px solid #dddddd;
+}
+
+div.index .hotProduct .tab li.current {
+	font-weight: bold;
+	border-bottom: 2px solid #ffffff;
+	background-color: #ffffff;
+}
+
+div.index .hotProduct .hotProductAd {
+	width: 260px;
+	height: 343px;
+	float: left;
+}
+
+div.index .hotProduct .tabContent {
+	width: 1200px;
+	float: left;
+	padding-left: 5px;
+	_padding-left: 2px;
+}
+
+div.index .hotProduct .tabContent li {
+	float: left;
+	margin-right: 10px;
+	margin-bottom: 10px;
+	position: relative;
+	width: 260px;
+	font-size: 15px;
+}
+
+div.index .hotProduct .tabContent li div {
+	float: left;
+	font-size: 13px;
+}
+
+div.index .hotProduct .tabContent li strong {
+	margin-right: 10px;
+	color: #d31c31;
+	font-size: 25px;
+	font-weight: bold;
+}
+
+div.index .hotProduct .tabContent li:hover {
+	filter: alpha(opacity = 70);
+	-moz-opacity: 0.7;
+	opacity: 0.9;
+}
+
+div.index .hotProduct .tabContent img {
+	display: block;
+	width: 260px;
+}
+
+div.index .newProduct {
+	width: 900px;
+	margin-bottom: 10px;
+}
+
+div.index .newProduct .title {
+	width: 260px;
+	height: 40px;
+	float: left;
+	margin-bottom: 10px;
+	background: url(../images/index.gif) 0px -270px no-repeat;
+}
+
+div.index .newProduct .title strong {
+	line-height: 38px;
+	display: block;
+	float: left;
+	padding-left: 10px;
+	color: #ffffff;
+	font-size: 16px;
+	font-family: "Microsoft YaHei";
+}
+
+div.index .newProduct .title a {
+	width: 40px;
+	height: 40px;
+	display: block;
+	float: right;
+}
+
+div.index .newProduct .tab {
+	width: 690px;
+	height: 40px;
+	line-height: 40px;
+	float: left;
+	margin-bottom: 10px;
+	overflow: hidden;
+	background: url(../images/index.gif) 0px -330px repeat-x;
+}
+
+div.index .newProduct .tab li {
+	width: 120px;
+	height: 36px;
+	line-height: 36px;
+	float: left;
+	margin-top: 2px;
+	font-size: 14px;
+	text-align: center;
+	overflow: hidden;
+	border-right: 1px solid #dddddd;
+}
+
+div.index .newProduct .tab li.current {
+	font-weight: bold;
+	border-bottom: 2px solid #ffffff;
+	background-color: #ffffff;
+}
+
+div.index .newProduct .newProductAd {
+	width: 260px;
+	height: 343px;
+	float: left;
+}
+
+div.index .newProduct .tabContent {
+	width: 1200px;
+	float: left;
+	padding-left: 5px;
+	_padding-left: 2px;
+}
+
+div.index .newProduct .tabContent li {
+	float: left;
+	margin-right: 10px;
+	margin-bottom: 10px;
+	position: relative;
+	width: 260px;
+	font-size: 15px;
+}
+
+div.index .newProduct .tabContent li div {
+	float: left;
+	font-size: 13px;
+}
+
+div.index .newProduct .tabContent li strong {
+	margin-right: 10px;
+	color: #d31c31;
+	font-size: 25px;
+	font-weight: bold;
+}
+
+div.index .newProduct .tabContent li:hover {
+	filter: alpha(opacity = 70);
+	-moz-opacity: 0.7;
+	opacity: 0.9;
+}
+
+div.index .newProduct .tabContent img {
+	display: block;
+	width: 260px;
+}
+
+div.index .friendLink {
+	height: 100px;
+	line-height: 30px;
+	padding-left: 30px;
+	margin-bottom: 10px;
+	background-image:url(../images/line.jpg);
+	border:hidden;
+}
+
+div.index .friendLink dt {
+	float: left;
+	padding: 0px 30px;
+	background-color: #6e6e6e;
+}
+
+div.index .friendLink dd {
+	float: left;
+}
+
+div.index .friendLink a {
+	margin: 0px 10px;
+	color: #ffffff;
+}
+
+div.index .friendLink .more {
+	float: right;
+	background-color: #6e6e6e;
+}
+
+div.index .indexAddCart {
+	cursor: pointer;
+	background-image:url(../images/indexAddCart.jpg);
+	width: 110px;
+	height: 30px;
+	border: thin;
+	margin-top: 5px;
+}
+
+div.index .indexCollect {
+	cursor: pointer;
+	background-image:url(../images/indexCollect.jpg);
+	width: 80px;
+	height: 30px;
+	border: thin;
+	margin-left: -12px;
+	margin-top: 5px;
+}
+

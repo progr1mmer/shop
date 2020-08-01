@@ -1,0 +1,18 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://rm-bp1el2hldik48ub4k125010.mysql.rds.aliyuncs.com:3306/shop?serverTimezone=Asia/Shanghai&characterEncoding=utf-8&autoReconnect=true&failOverReadOnly=false&useSSL=false
+    username: shop
+    password: shop11!_
+  freemarker:
+    cache: true
+    settings: {
+      template_update_delay: 3600
+    }
+  messages:
+    cache-duration: 3600
+  mail:
+    host: smtp.example.com
+    port: 25
+    username: example@163.com
+    password: pwd
