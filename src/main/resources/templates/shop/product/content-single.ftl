@@ -86,7 +86,7 @@
                 <div class="col-xs-12">
                     <div class="price">
                         <span class="salePrice">
-                            <small>${setting.currencySign}</small><span>${currency(product.price)}</span>
+                            <small>${setting.currencySign}</small><B>${currency(product.price)}</B>
                         </span>
                         [#if setting.isShowMarketPrice]
                             <span class="marketPrice">

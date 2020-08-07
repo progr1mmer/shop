@@ -2,10 +2,6 @@
 
 /* ---------- Error ---------- */
 
-body {
-    background-color: #f5f5f5;
-}
-
 div.error {
     margin-top: 10px;
 }

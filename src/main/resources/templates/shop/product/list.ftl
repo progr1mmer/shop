@@ -26,7 +26,7 @@
     <link href="${base}/shop/css/common.css" rel="stylesheet" type="text/css"/>
     <link href="${base}/shop/css/product-complex.css" rel="stylesheet" type="text/css"/>
 </head>
-<body style="background-color: #f5f5f5">
+<body>
     <nav class="navbar navbar-default navbar-fixed-top">
         <div class="container-fluid">
             <div class="navbar-header">

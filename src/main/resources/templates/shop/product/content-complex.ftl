@@ -38,7 +38,7 @@
         </div>
     </nav>
 
-    <div class="container-fluid" style="margin-top: 50px;">
+    <div class="container-fluid">
         <div class="image">
             <div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
                 [#if product.productImages?has_content]
