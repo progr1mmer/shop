@@ -130,10 +130,6 @@ $().ready(function() {
 						<input type="checkbox" name="isEnabled" value="true"[#if admin.isEnabled] checked="checked"[/#if] />${message("Admin.isEnabled")}
 						<input type="hidden" name="_isEnabled" value="false" />
 					</label>
-					<label>
-						<input type="checkbox" name="isSeeAllData" value="true" [#if admin.isSeeAllData] checked="checked"[/#if] />${message("admin.isSeeAll")}
-						<input type="hidden" name="_isSeeAllData" value="false" />
-					</label>
 					[#if admin.isLocked]
 						<label>
 							<input type="checkbox" name="isLocked" value="true" checked="checked" />${message("Admin.isLocked")}

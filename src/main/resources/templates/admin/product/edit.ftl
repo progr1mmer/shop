@@ -34,6 +34,7 @@ $().ready(function() {
 	var $memberPriceTr = $("#memberPriceTr");
 	var $memberPrice = $("#memberPriceTr input");
 	var $browserButton = $("#browserButton");
+	var $browserButtonI = $("#browserButtonI");
 	var $productImageTable = $("#productImageTable");
 	var $addProductImage = $("#addProductImage");
 	var $deleteProductImage = $("a.deleteProductImage");
@@ -49,7 +50,8 @@ $().ready(function() {
 	[@flash_message /]
 	
 	$browserButton.browser();
-	
+	$browserButtonI.browser();
+
 	// 会员价
 	$isMemberPrice.click(function() {
 		if ($(this).prop("checked")) {
@@ -75,6 +77,9 @@ $().ready(function() {
 				<td>
 					<input type="text" name="productImages[' + productImageIndex + '].order" class="text productImageOrder" maxlength="9" style="width: 50px;" \/>
 				<\/td>
+                <td>
+                    <input type="checkbox" name="productImages[' + productImageIndex + '].isB" value="true" \/>
+                <\/td>
 				<td>
 					<a href="javascript:;" class="deleteProductImage">[${message("admin.common.delete")}]<\/a>
 				<\/td>
@@ -420,7 +425,7 @@ $().ready(function() {
 					<input type="text" name="price" class="text" value="${product.price}" maxlength="16" />
 				</td>
 			</tr>
-			<tr>
+			[#--<tr>
 				<th>
 					${message("Product.memberPrice")}:
 				</th>
@@ -439,7 +444,7 @@ $().ready(function() {
 						${memberRank.name}: <input type="text" name="memberPrice_${memberRank.id}" class="text memberPrice" value="${product.memberPrice.get(memberRank)}" maxlength="16" style="width: 60px; margin-right: 6px;"[#if !product.memberPrice?has_content] disabled="disabled"[/#if] />
 					[/#list]
 				</td>
-			</tr>
+			</tr>--]
 			<tr>
 				<th>
 					${message("Product.cost")}:
@@ -470,6 +475,20 @@ $().ready(function() {
 					</span>
 				</td>
 			</tr>
+            <tr>
+                <th>
+                    ${message("admin.product.iShow")}(${message("admin.product.complexMode")}):
+                </th>
+                <td>
+					<span class="fieldSet">
+						<input type="text" name="imageI" class="text" value="${product.imageI}" maxlength="200" title="${message("admin.product.imageTitle")}" />
+						<input type="button" id="browserButtonI" class="button" value="${message("admin.browser.select")}" />
+						[#if product.imageI??]
+							<a href="${product.imageI}" target="_blank">${message("admin.common.view")}</a>
+                        [/#if]
+					</span>
+                </td>
+            </tr>
 			<tr>
 				<th>
 					${message("Product.unit")}:
@@ -600,13 +619,54 @@ $().ready(function() {
 					<input type="text" name="seoDescription" class="text" value="${product.seoDescription}" maxlength="200" />
 				</td>
 			</tr>
+			<tr>
+				<th>
+				    ${message("Product.mode")}:
+				</th>
+				<td>
+                    <select name="mode">
+                        <option value="single" [#if "single" == product.mode] selected="selected"[/#if]>
+                            ${message("admin.product.singleMode")}
+                        </option>
+                        <option value="complex"[#if "complex" == product.mode] selected="selected"[/#if]>
+                            ${message("admin.product.complexMode")}
+                        </option>
+                    </select>
+				</td>
+			</tr>
 		</table>
 		<table class="input tabContent">
-			<tr>
+            <tr>
+                <th>
+                    ${message("admin.product.aShow")}
+                </th>
 				<td>
 					<textarea id="editor" name="introduction" class="editor" style="width: 100%;">${product.introduction?html}</textarea>
 				</td>
 			</tr>
+            <tr>
+                <th>
+                    ${message("admin.product.bShow")}
+                </th>
+                <td>
+                    <textarea id="editorB" name="introductionB" class="editor" style="width: 100%;">${product.introductionB?html}</textarea>
+                </td>
+            </tr>
+            [#--<tr>
+                <th>
+                    特殊地区
+                </th>
+                <td>
+                    <select name="specialArea">
+                        <option value="single" [#if "single" == product.mode] selected="selected"[/#if]>
+                            台湾
+                        </option>
+                        <option value="complex"[#if "complex" == product.mode] selected="selected"[/#if]>
+                            香港
+                        </option>
+                    </select>
+                </td>
+            </tr>--]
 		</table>
 		<table id="productImageTable" class="input tabContent">
 			<tr>
@@ -624,7 +684,10 @@ $().ready(function() {
 				<th>
 					${message("admin.common.order")}
 				</th>
-				<th>
+                <th>
+                    ${message("admin.product.bShow")}
+                </th>
+                <th>
 					${message("admin.common.delete")}
 				</th>
 			</tr>
@@ -644,8 +707,11 @@ $().ready(function() {
 					<td>
 						<input type="text" name="productImages[${productImage_index}].order" class="text productImageOrder" value="${productImage.order}" maxlength="9" style="width: 50px;" />
 					</td>
+                    <td>
+                        <input type="checkbox" name="productImages[${productImage_index}].isB" value="true"[#if productImage.isB] checked="checked"[/#if] />
+                    </td>
 					<td>
-						<a href="javascript:;" class="deleteProductImage">[${message("admin.common.delete")}]</a>
+						<a href="javascript:" class="deleteProductImage">[${message("admin.common.delete")}]</a>
 					</td>
 				</tr>
 			[/#list]

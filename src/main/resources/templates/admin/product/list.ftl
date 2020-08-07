@@ -304,9 +304,6 @@ $().ready(function() {
 					<a href="javascript:;" class="sort" name="isMarketable">${message("Product.isMarketable")}</a>
 				</th>
 				<th>
-					<a href="javascript:;" class="sort" name="status">状态</a>
-				</th>
-				<th>
 					<a href="javascript:;" class="sort" name="createDate">${message("admin.common.createDate")}</a>
 				</th>
 				<th>
@@ -354,21 +351,19 @@ $().ready(function() {
 						<span class="${product.isMarketable?string("true", "false")}Icon">&nbsp;</span>
 					</td>
 					<td>
-						<span >
-							[#if product.status==1]待审核[/#if]
-							[#if product.status==2]审核通过[/#if]
-							[#if product.status==3]审核未通过[/#if]
-						</span>
-					</td>
-					<td>
 						<span title="${product.createDate?string("yyyy-MM-dd HH:mm:ss")}">${product.createDate}</span>
 					</td>
 					<td>
 						<a href="edit.html?id=${product.id}">[${message("admin.common.edit")}]</a>
 						[#if product.isMarketable]
-							<a href="${base}${product.path}" target="_blank">[${message("admin.common.view")}]</a>
+                            [#if "single" == product.mode]
+                                <a href="${base}${product.path}" target="_blank">[${message("admin.common.view")}(A)]</a>
+                                <a href="${base}${product.path}?ab=b" target="_blank">[${message("admin.common.view")}(B)]</a>
+                            [#else]
+                                <a href="${base}${product.path}" target="_blank">[${message("admin.common.view")}]</a>
+                            [/#if]
 						[#else]
-							[${message("admin.product.notMarketable")}]
+							<a href="${base}${product.path}" target="_blank">[${message("admin.common.view")}]</a>
 						[/#if]
 					</td>
 				</tr>

@@ -56,7 +56,7 @@ public class Cart extends BaseEntity {
     /**
      * 购物车项
      */
-    private Set<CartItem> cartItems = new HashSet<CartItem>();
+    private Set<CartItem> cartItems = new HashSet<>();
 
     /**
      * 获取密钥

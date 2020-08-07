@@ -10,7 +10,7 @@ spring:
       template_update_delay: 3600
     }
   messages:
-    cache-duration: 3600
+    cache-duration: Pt1h
   mail:
     host: smtp.example.com
     port: 25

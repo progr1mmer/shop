@@ -6,6 +6,10 @@ import com.x.shop.service.PluginConfigService;
 import org.apache.commons.lang3.builder.CompareToBuilder;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.springframework.beans.factory.InitializingBean;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
@@ -18,10 +22,14 @@ import java.util.List;
  * @author progr1mmer
  * @date Created on 2020/2/13
  */
-public abstract class StoragePlugin implements Comparable<StoragePlugin> {
+public abstract class StoragePlugin implements Comparable<StoragePlugin>, InitializingBean {
+
+    protected String base;
 
     @Resource(name = "pluginConfigServiceImpl")
     private PluginConfigService pluginConfigService;
+    @Autowired
+    private Environment environment;
 
     /**
      * 获取ID
@@ -154,6 +162,12 @@ public abstract class StoragePlugin implements Comparable<StoragePlugin> {
      * @return 文件信息
      */
     public abstract List<FileInfo> browser(String path);
+
+    @Override
+    public void afterPropertiesSet() throws Exception {
+        String contextPath = environment.getProperty("server.servlet.context-path");
+        base = "/".equals(contextPath) ? "" : contextPath;
+    }
 
     @Override
     public boolean equals(Object obj) {

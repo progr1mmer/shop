@@ -39,12 +39,12 @@ public class Role extends BaseEntity {
     /**
      * 权限
      */
-    private List<String> authorities = new ArrayList<String>();
+    private List<String> authorities = new ArrayList<>();
 
     /**
      * 管理员
      */
-    private Set<Admin> admins = new HashSet<Admin>();
+    private Set<Admin> admins = new HashSet<>();
 
     /**
      * 获取名称

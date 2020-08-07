@@ -93,7 +93,7 @@ public class GoodsDaoImpl extends BaseDaoImpl<Goods, Long> implements GoodsDao {
         }
         StringBuilder fullName = new StringBuilder(product.getName());
         if (product.getSpecificationValues() != null && !product.getSpecificationValues().isEmpty()) {
-            List<SpecificationValue> specificationValues = new ArrayList<SpecificationValue>(product.getSpecificationValues());
+            List<SpecificationValue> specificationValues = new ArrayList<>(product.getSpecificationValues());
             specificationValues.sort((a1, a2) -> new CompareToBuilder().append(a1.getSpecification(), a2.getSpecification()).toComparison());
             fullName.append(Product.FULL_NAME_SPECIFICATION_PREFIX);
             int i = 0;

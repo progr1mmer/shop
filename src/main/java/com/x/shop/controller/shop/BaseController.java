@@ -33,6 +33,8 @@ public abstract class BaseController {
      */
     protected static final String ERROR_VIEW = "/shop/common/error";
 
+    protected static final String RESOURCE_NOT_FOUND_VIEW = "/shop/common/resource_not_found";
+
     /**
      * 错误消息
      */

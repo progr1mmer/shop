@@ -1,39 +1,37 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!DOCTYPE html>
+<html lang="zh_CN">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8" />
-<title>${message("shop.error.title")}[#if setting.isShowPowered] - ${setting.powered}[/#if]</title>
-<meta name="author" content="progr1mmer" />
-<link href="${base}/shop/css/common.css" rel="stylesheet" type="text/css" />
-<link href="${base}/shop/css/error.css" rel="stylesheet" type="text/css" />
-<script type="text/javascript" src="${base}/shop/js/jquery.js"></script>
-<script type="text/javascript" src="${base}/shop/js/common.js"></script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta name="author" content="progr1mmer" />
+    <title>${message("shop.error.title")}[#if setting.isShowPowered] - ${setting.powered}[/#if]</title>
+    <link href="${base}/shop/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
+    <link href="${base}/shop/css/common.css" rel="stylesheet" type="text/css" />
+    <link href="${base}/shop/css/error.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
-	[#include "/shop/include/header.ftl" /]
-	<div class="container error">
-		<div class="span24">
-			<div class="main">
-				<dl>
-					<dt>${message("shop.error.message")}</dt>
-					[#if message??]
-						<dd>${content}</dd>
-					[/#if]
-					[#if constraintViolations?has_content]
-						[#list constraintViolations as constraintViolation]
-							<dd>[${constraintViolation.propertyPath}] ${constraintViolation.message}</dd>
-						[/#list]
-					[/#if]
-					<dd>
-						<a href="javascript:;" onclick="window.history.back(); return false;">${message("shop.error.back")}</a>
-					</dd>
-					<dd>
-						<a href="${base}/">&gt;&gt; ${message("shop.error.home")}</a>
-					</dd>
-				</dl>
-			</div>
-		</div>
+	<div class="container-fluid">
+        <div class="error">
+            <div class="main">
+                <dl>
+                    <dt>${message("shop.error.message")}</dt>
+                    [#if message??]
+                        <dd>${content}</dd>
+                    [/#if]
+                    [#if constraintViolations?has_content]
+                        [#list constraintViolations as constraintViolation]
+                            <dd>[${constraintViolation.propertyPath}] ${constraintViolation.message}</dd>
+                        [/#list]
+                    [/#if]
+                    <dd>
+                        <a href="javascript:" onclick="window.history.back(); return false;">&gt;&gt; ${message("shop.error.back")}</a>
+                    </dd>
+                </dl>
+            </div>
+        </div>
 	</div>
 	[#include "/shop/include/footer.ftl" /]
+    <script type="text/javascript" src="${base}/shop/js/jquery.min.js"></script>
+    <script type="text/javascript" src="${base}/shop/js/bootstrap.min.js"></script>
 </body>
 </html>

@@ -19,10 +19,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * Controller - 购物车
@@ -52,7 +49,7 @@ public class CartController extends BaseController {
         }
         Product product = productService.find(id);
         if (product == null) {
-            return Message.warn("shop.cart.productNotExsit");
+            return Message.warn("shop.cart.productNotExist");
         }
         if (!product.getIsMarketable()) {
             return Message.warn("shop.cart.productNotMarketable");
@@ -69,26 +66,28 @@ public class CartController extends BaseController {
             cartService.save(cart);
         }
 
-        if (Cart.MAX_PRODUCT_COUNT != null && cart.getCartItems().size() >= Cart.MAX_PRODUCT_COUNT) {
+        if (cart.getCartItems().size() >= Cart.MAX_PRODUCT_COUNT) {
             return Message.warn("shop.cart.addCountNotAllowed", Cart.MAX_PRODUCT_COUNT);
         }
 
         if (cart.contains(product)) {
             CartItem cartItem = cart.getCartItem(product);
-            if (CartItem.MAX_QUANTITY != null && cartItem.getQuantity() + quantity > CartItem.MAX_QUANTITY) {
+            if (cartItem.getQuantity() + quantity > CartItem.MAX_QUANTITY) {
                 return Message.warn("shop.cart.maxCartItemQuantity", CartItem.MAX_QUANTITY);
             }
             if (product.getStock() != null && cartItem.getQuantity() + quantity > product.getAvailableStock()) {
                 return Message.warn("shop.cart.productLowStock");
             }
-            cartItem.add(quantity);
-            cartItemService.update(cartItem);
         } else {
-            if (CartItem.MAX_QUANTITY != null && quantity > CartItem.MAX_QUANTITY) {
+            if (quantity > CartItem.MAX_QUANTITY) {
                 return Message.warn("shop.cart.maxCartItemQuantity", CartItem.MAX_QUANTITY);
             }
             if (product.getStock() != null && quantity > product.getAvailableStock()) {
                 return Message.warn("shop.cart.productLowStock");
+            }
+            if (!cart.isEmpty()) {
+                cart.getCartItems().forEach(cartItemService::delete);
+                cart.setCartItems(new HashSet<>());
             }
             CartItem cartItem = new CartItem();
             cartItem.setQuantity(quantity);
@@ -131,10 +130,10 @@ public class CartController extends BaseController {
         CartItem cartItem = cartItemService.find(id);
         Set<CartItem> cartItems = cart.getCartItems();
         if (cartItem == null || cartItems == null || !cartItems.contains(cartItem)) {
-            data.put("message", Message.error("shop.cart.cartItemNotExsit"));
+            data.put("message", Message.error("shop.cart.cartItemNotExist"));
             return data;
         }
-        if (CartItem.MAX_QUANTITY != null && quantity > CartItem.MAX_QUANTITY) {
+        if (quantity > CartItem.MAX_QUANTITY) {
             data.put("message", Message.warn("shop.cart.maxCartItemQuantity", CartItem.MAX_QUANTITY));
             return data;
         }
@@ -172,7 +171,7 @@ public class CartController extends BaseController {
         CartItem cartItem = cartItemService.find(id);
         Set<CartItem> cartItems = cart.getCartItems();
         if (cartItem == null || cartItems == null || !cartItems.contains(cartItem)) {
-            data.put("message", Message.error("shop.cart.cartItemNotExsit"));
+            data.put("message", Message.error("shop.cart.cartItemNotExist"));
             return data;
         }
         cartItems.remove(cartItem);

@@ -2,10 +2,24 @@
 
 /* ---------- Error ---------- */
 
+body {
+    background-color: #f5f5f5;
+}
+
+div.error {
+    margin-top: 10px;
+}
+
 div.error .main {
-	height: 220px;
-	padding: 80px 0px 0px 400px;
-	background: url(../images/error.jpg) 0px 0px no-repeat;
+    margin: 0 auto;
+    max-width: 1000px;
+	height: 300px;
+	padding: 10px 0 0 20px;
+	background: url(../images/error.jpg) 0 0 no-repeat;
+}
+
+div.error .main dl {
+    margin-bottom: 10px;
 }
 
 div.error .main dt {
@@ -13,7 +27,6 @@ div.error .main dt {
 	color: #fe6200;
 	font-size: 20px;
 	font-weight: bold;
-	font-family: "Microsoft YaHei";
 }
 
 div.error .main dd {

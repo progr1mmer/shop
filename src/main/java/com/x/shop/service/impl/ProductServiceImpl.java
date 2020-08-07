@@ -121,16 +121,10 @@ public class ProductServiceImpl extends BaseServiceImpl<Product, Long> implement
     }
 
     @Override
-    @Transactional(readOnly = true)
-    public boolean isPurchased(Product product) {
-        return productDao.isPurchased(product);
-    }
-
-    @Override
     public long viewHits(Long id) {
         Ehcache cache = cacheManager.getEhcache(Product.HITS_CACHE_NAME);
         Element element = cache.get(id);
-        Long hits;
+        long hits;
         if (element != null) {
             hits = (Long) element.getObjectValue();
         } else {

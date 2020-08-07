@@ -10,7 +10,7 @@ spring:
       template_update_delay: 0
     }
   messages:
-    cache-duration: 0
+    cache-duration: Pt0s
   mail:
     host: smtp.example.com
     port: 25

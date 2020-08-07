@@ -98,7 +98,6 @@ public class ProductController extends BaseController {
         model.addAttribute("productCategoryTree", productCategoryService.findTree());
         model.addAttribute("brands", brandService.findAll());
         model.addAttribute("tags", tagService.findList(Type.product));
-        //model.addAttribute("memberRanks", memberRankService.findAll());
         model.addAttribute("specifications", specificationService.findAll());
         return "admin/product/add";
     }
@@ -153,7 +152,6 @@ public class ProductController extends BaseController {
         product.setMonthHitsDate(new Date());
         product.setWeekSalesDate(new Date());
         product.setMonthSalesDate(new Date());
-        product.setReviews(null);
         product.setPromotions(null);
         product.setCartItems(null);
         product.setOrderItems(null);
@@ -188,7 +186,7 @@ public class ProductController extends BaseController {
         }
 
         Goods goods = new Goods();
-        List<Product> products = new ArrayList<Product>();
+        List<Product> products = new ArrayList<>();
         if (specificationIds != null && specificationIds.length > 0) {
             for (int i = 0; i < specificationIds.length; i++) {
                 Specification specification = specificationService.find(specificationIds[i]);
@@ -225,7 +223,6 @@ public class ProductController extends BaseController {
                                 specificationProduct.setWeekSalesDate(new Date());
                                 specificationProduct.setMonthSalesDate(new Date());
                                 specificationProduct.setGoods(goods);
-                                specificationProduct.setReviews(null);
                                 specificationProduct.setSpecifications(new HashSet<>());
                                 specificationProduct.setSpecificationValues(new HashSet<>());
                                 specificationProduct.setPromotions(null);
@@ -384,7 +381,6 @@ public class ProductController extends BaseController {
                                     specificationProduct.setWeekSalesDate(new Date());
                                     specificationProduct.setMonthSalesDate(new Date());
                                     specificationProduct.setGoods(goods);
-                                    specificationProduct.setReviews(null);
                                     specificationProduct.setSpecifications(new HashSet<>());
                                     specificationProduct.setSpecificationValues(new HashSet<>());
                                     specificationProduct.setPromotions(null);

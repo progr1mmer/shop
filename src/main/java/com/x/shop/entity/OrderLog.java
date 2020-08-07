@@ -70,8 +70,6 @@ public class OrderLog extends BaseEntity {
         other
     }
 
-    ;
-
     /**
      * 类型
      */

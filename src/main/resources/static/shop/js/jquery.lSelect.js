@@ -4,7 +4,7 @@
 			var settings = {
 				choose: "请选择...",
 				emptyValue: "",
-				cssStyle: {"margin-right": "4px"},
+				cssStyle: {},
 				url: null,
 				type: "GET"
 			};
@@ -49,7 +49,7 @@
 					if ($.isEmptyObject(data)) {
 						return false;
 					}
-					var select = '<select name="' + selectName + '">';
+					var select = '<select name="' + selectName + '" class="form-control" required>';
 					if (settings.emptyValue != null && settings.choose != null) {
 						select += '<option value="' + settings.emptyValue + '">' + settings.choose + '</option>';
 					}

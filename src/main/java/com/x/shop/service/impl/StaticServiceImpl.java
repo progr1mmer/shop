@@ -117,10 +117,15 @@ public class StaticServiceImpl implements StaticService {
         Assert.notNull(product);
 
         delete(product);
-        Template template = templateService.get("productContent");
+        Template template;
+        if (product.getMode() == Product.Mode.single) {
+            template = templateService.get("productContentSingle");
+        } else {
+            template = templateService.get("productContentComplex");
+        }
         int buildCount = 0;
         if (product.getIsMarketable()) {
-            Map<String, Object> model = new HashMap<String, Object>();
+            Map<String, Object> model = new HashMap<>();
             model.put("product", product);
             buildCount += build(template.getTemplatePath(), product.getPath(), model);
         }
@@ -140,8 +145,8 @@ public class StaticServiceImpl implements StaticService {
         int buildCount = 0;
         Template sitemapIndexTemplate = templateService.get("sitemapIndex");
         Template sitemapTemplate = templateService.get("sitemap");
-        Map<String, Object> model = new HashMap<String, Object>();
-        List<String> staticPaths = new ArrayList<String>();
+        Map<String, Object> model = new HashMap<>();
+        List<String> staticPaths = new ArrayList<>();
         for (int step = 0, index = 0, first = 0, count = SITEMAP_MAX_SIZE; ; ) {
             try {
                 model.put("index", index);
@@ -292,8 +297,11 @@ public class StaticServiceImpl implements StaticService {
     @Transactional(readOnly = true)
     public int delete(Product product) {
         Assert.notNull(product);
-
-        return delete(product.getPath());
+        int count = 0;
+        for (String path : product.getAllPath()) {
+            count += delete(path);
+        }
+        return count;
     }
 
     @Override

@@ -4,23 +4,15 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
     <meta name="author" content="progr1mmer" />
-    [#if productCategory??]
-        [@seo type = "productList"]
-		    <title>[#if productCategory.seoTitle??]${productCategory.seoTitle}[#elseif seo.title??][@seo.title?interpret /][/#if][#if setting.isShowPowered] - ${setting.powered}[/#if]</title>
-            [#if productCategory.seoKeywords??]
-			    <meta name="keywords" content="${productCategory.seoKeywords}" />
-            [#elseif seo.keywords??]
-			    <meta name="keywords" content="[@seo.keywords?interpret /]" />
-            [/#if]
-            [#if productCategory.seoDescription??]
-			    <meta name="description" content="${productCategory.seoDescription}" />
-            [#elseif seo.description??]
-			    <meta name="description" content="[@seo.description?interpret /]" />
-            [/#if]
-        [/@seo]
-    [#else]
-	    <title>${message("shop.product.title")}[#if setting.isShowPowered] - ${setting.powered}[/#if]</title>
-    [/#if]
+    [@seo type = "index"]
+	    <title>[#if seo.title??][@seo.title?interpret /][#else]${message("shop.index.title")}[/#if][#if setting.isShowPowered] - ${setting.powered}[/#if]</title>
+        [#if seo.keywords??]
+		    <meta name="keywords" content="[@seo.keywords?interpret /]" />
+        [/#if]
+        [#if seo.description??]
+		    <meta name="description" content="[@seo.description?interpret /]" />
+        [/#if]
+    [/@seo]
     <link href="${base}/shop/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
     <link href="${base}/shop/css/sweetalert2.min.css" rel="stylesheet" type="text/css"/>
     <link href="${base}/shop/css/common.css" rel="stylesheet" type="text/css"/>
@@ -41,7 +33,33 @@
         </div>
     </nav>
 
-    <div class="list result">
+    <div id="carousel-example-generic" class="index carousel slide" data-ride="carousel">
+        [#if product.imageI?has_content]
+            <!-- Indicators -->
+            <ol class="carousel-indicators">
+                <li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
+            </ol>
+            <!-- Wrapper for slides -->
+            <div class="carousel-inner" role="listbox">
+                <div class="item active">
+                    <img src="${product.imageI}" title="${setting.siteName}" alt="${setting.siteName}" width="100%"/>
+                </div>
+            </div>
+        [#else]
+            <!-- Indicators -->
+            <ol class="carousel-indicators">
+                <li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
+            </ol>
+            <!-- Wrapper for slides -->
+            <div class="carousel-inner" role="listbox">
+                <div class="item active">
+                    <img src="${setting.defaultLargeProductImage}" title="${setting.siteName}" alt="${setting.siteName}" width="100%" />
+                </div>
+            </div>
+        [/#if]
+    </div>
+
+    <div class="index result">
         [#if page.content?has_content]
             [#list page.content?chunk(2) as row]
                 <div class="line">
@@ -49,7 +67,7 @@
                         <a href="${base}${product.path}">
                             <img src="[#if product.image??]${product.image}[#else]${setting.defaultThumbnailProductImage}[/#if]" width="100%" height="100%"/>
                             <div class="text">
-                                <p title="${product.name}">${abbreviate(product.name, 20)}</p>
+                                <p title="${product.name}">${abbreviate(product.name, 30)}</p>
                                 <div class="price">
                                     <span class="salePrice">
                                         <small>${setting.currencySign}</small><span>${currency(product.price)}</span>

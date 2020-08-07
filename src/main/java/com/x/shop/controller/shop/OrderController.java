@@ -4,7 +4,6 @@ import com.x.shop.common.Message;
 import com.x.shop.common.Pageable;
 import com.x.shop.common.Setting;
 import com.x.shop.entity.*;
-import com.x.shop.plugin.PaymentPlugin;
 import com.x.shop.service.*;
 import com.x.shop.util.SettingUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -48,8 +47,6 @@ public class OrderController extends BaseController {
     private OrderService orderService;
     @Resource(name = "shippingServiceImpl")
     private ShippingService shippingService;
-    @Resource(name = "pluginServiceImpl")
-    private PluginService pluginService;
 
     /**
      * 订单锁定
@@ -86,7 +83,7 @@ public class OrderController extends BaseController {
     @RequestMapping(value = "/coupon_info", method = RequestMethod.POST)
     public @ResponseBody
     Map<String, Object> couponInfo(String code) {
-        Map<String, Object> data = new HashMap<String, Object>();
+        Map<String, Object> data = new HashMap<>();
         Cart cart = cartService.getCurrent();
         if (cart == null || cart.isEmpty()) {
             data.put("message", Message.warn("shop.order.cartNotEmpty"));
@@ -135,7 +132,7 @@ public class OrderController extends BaseController {
     public String info(ModelMap model) {
         Cart cart = cartService.getCurrent();
         if (cart == null || cart.isEmpty()) {
-            return "redirect:/cart/list.html";
+            return "redirect:/common/error.html";
         }
         if (!isValid(cart)) {
             return ERROR_VIEW;
@@ -154,10 +151,10 @@ public class OrderController extends BaseController {
     @RequestMapping(value = "/calculate", method = RequestMethod.POST)
     public @ResponseBody
     Map<String, Object> calculate(Long paymentMethodId, Long shippingMethodId, String code, @RequestParam(defaultValue = "false") Boolean isInvoice, String invoiceTitle, @RequestParam(defaultValue = "false") Boolean useBalance, String memo) {
-        Map<String, Object> data = new HashMap<String, Object>();
+        Map<String, Object> data = new HashMap<>();
         Cart cart = cartService.getCurrent();
         if (cart == null || cart.isEmpty()) {
-            data.put("message", Message.error("shop.order.cartNotEmpty"));
+            data.put("message", Message.warn("shop.order.cartNotEmpty"));
             return data;
         }
         PaymentMethod paymentMethod = paymentMethodService.find(paymentMethodId);
@@ -194,11 +191,11 @@ public class OrderController extends BaseController {
         }
         PaymentMethod paymentMethod = paymentMethodService.find(paymentMethodId);
         if (paymentMethod == null) {
-            return Message.error("shop.order.paymentMethodNotExsit");
+            return Message.error("shop.order.paymentMethodNotExist");
         }
         ShippingMethod shippingMethod = shippingMethodService.find(shippingMethodId);
         if (shippingMethod == null) {
-            return Message.error("shop.order.shippingMethodNotExsit");
+            return Message.error("shop.order.shippingMethodNotExist");
         }
         if (!paymentMethod.getShippingMethods().contains(shippingMethod)) {
             return Message.error("shop.order.deliveryUnsupported");
@@ -209,35 +206,16 @@ public class OrderController extends BaseController {
     }
 
     /**
-     * 支付
+     * 结果
      */
-    @RequestMapping(value = "/payment.html", method = RequestMethod.GET)
-    public String payment(String sn, ModelMap model) {
+    @RequestMapping(value = "/result.html", method = RequestMethod.GET)
+    public String result(String sn, ModelMap model) {
         Order order = orderService.findBySn(sn);
-        if (order == null || order.isExpired() || order.getPaymentMethod() == null) {
+        if (order == null) {
             return ERROR_VIEW;
         }
         model.addAttribute("order", order);
-        return "/shop/member/order/payment";
-    }
-
-    /**
-     * 计算支付金额
-     */
-    @RequestMapping(value = "/calculate_amount", method = RequestMethod.POST)
-    public @ResponseBody
-    Map<String, Object> calculateAmount(String paymentPluginId, String sn) {
-        Map<String, Object> data = new HashMap<>();
-        Order order = orderService.findBySn(sn);
-        PaymentPlugin paymentPlugin = pluginService.getPaymentPlugin(paymentPluginId);
-        if (order == null || order.isExpired() || order.isLocked(null) || order.getPaymentMethod() == null || order.getPaymentMethod().getMethod() == PaymentMethod.Method.offline || paymentPlugin == null || !paymentPlugin.getIsEnabled()) {
-            data.put("message", ERROR_MESSAGE);
-            return data;
-        }
-        data.put("message", SUCCESS_MESSAGE);
-        data.put("fee", paymentPlugin.calculateFee(order.getAmountPayable()));
-        data.put("amount", paymentPlugin.calculateAmount(order.getAmountPayable()));
-        return data;
+        return "shop/order/result";
     }
 
     /**
@@ -245,7 +223,6 @@ public class OrderController extends BaseController {
      */
     @RequestMapping(value = "/list.html", method = RequestMethod.GET)
     public String list(Integer pageNumber, ModelMap model) {
-        //Member member = memberService.getCurrent();
         Pageable pageable = new Pageable(pageNumber, PAGE_SIZE);
         model.addAttribute("page", orderService.findPage(pageable));
         return "shop/member/order/list";
@@ -260,12 +237,8 @@ public class OrderController extends BaseController {
         if (order == null) {
             return ERROR_VIEW;
         }
-        /*Member member = memberService.getCurrent();
-        if (!member.getOrders().contains(order)) {
-            return ERROR_VIEW;
-        }*/
         model.addAttribute("order", order);
-        return "shop/member/order/view";
+        return "shop/order/view";
     }
 
     /**
@@ -291,7 +264,7 @@ public class OrderController extends BaseController {
     @RequestMapping(value = "/delivery_query", method = RequestMethod.GET)
     public @ResponseBody
     Map<String, Object> deliveryQuery(String sn) {
-        Map<String, Object> data = new HashMap<String, Object>();
+        Map<String, Object> data = new HashMap<>();
         Shipping shipping = shippingService.findBySn(sn);
         Setting setting = SettingUtils.get();
         if (shipping != null && shipping.getOrder() != null && StringUtils.isNotEmpty(setting.getKuaidi100Key()) && StringUtils.isNotEmpty(shipping.getDeliveryCorpCode()) && StringUtils.isNotEmpty(shipping.getTrackingNo())) {

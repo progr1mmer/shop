@@ -1,5 +1,6 @@
 package com.x.shop.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.x.shop.common.BigDecimalNumericFieldBridge;
 import com.x.shop.common.CommonAttributes;
@@ -72,9 +73,13 @@ public class Product extends BaseEntity {
     public static final String FULL_NAME_SPECIFICATION_SEPARATOR = " ";
 
     /**
-     * 静态路径
+     * 单页静态路径
      */
-    private static String staticPath;
+    private static String singleStaticPath;
+    /**
+     * 综合静态路径
+     */
+    private static String complexStaticPath;
 
     /**
      * 排序类型
@@ -110,6 +115,21 @@ public class Product extends BaseEntity {
          * 日期降序
          */
         dateDesc
+    }
+
+    /**
+     * 模式
+     */
+    public enum Mode {
+        /**
+         * 单页
+         */
+        single,
+
+        /**
+         * 综合
+         */
+        complex
     }
 
     /**
@@ -413,11 +433,6 @@ public class Product extends BaseEntity {
     private List<ProductImage> productImages = new ArrayList<ProductImage>();
 
     /**
-     * 评论
-     */
-    private Set<Review> reviews = new HashSet<Review>();
-
-    /**
      * 标签
      */
     private Set<Tag> tags = new HashSet<>();
@@ -457,22 +472,25 @@ public class Product extends BaseEntity {
      */
     private Map<Parameter, String> parameterValue = new HashMap<>();
 
+    private Mode mode;
+
+    private String imageI;
+
+    private String introductionB;
+
     static {
         try {
             File shopXmlFile = new ClassPathResource(CommonAttributes.SHOP_XML_PATH).getFile();
             org.dom4j.Document document = new SAXReader().read(shopXmlFile);
-            org.dom4j.Element element = (org.dom4j.Element) document.selectSingleNode("/shop/template[@id='productContent']");
-            staticPath = element.attributeValue("staticPath");
+            org.dom4j.Element singleElement = (org.dom4j.Element) document.selectSingleNode("/shop/template[@id='productContentSingle']");
+            org.dom4j.Element complexElement = (org.dom4j.Element) document.selectSingleNode("/shop/template[@id='productContentComplex']");
+            singleStaticPath = singleElement.attributeValue("staticPath");
+            complexStaticPath = complexElement.attributeValue("staticPath");
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    /**
-     * 获取编号
-     *
-     * @return 编号
-     */
     @JsonProperty
     @Field(store = Store.YES, index = Index.YES, analyze = Analyze.NO)
     @Pattern(regexp = "^[0-9a-zA-Z_-]+$")
@@ -482,20 +500,10 @@ public class Product extends BaseEntity {
         return sn;
     }
 
-    /**
-     * 设置编号
-     *
-     * @param sn 编号
-     */
     public void setSn(String sn) {
         this.sn = sn;
     }
 
-    /**
-     * 获取名称
-     *
-     * @return 名称
-     */
     @JsonProperty
     @Field(store = Store.YES, index = Index.YES, analyzer = @Analyzer(impl = SmartChineseAnalyzer.class))
     @NotEmpty
@@ -505,20 +513,10 @@ public class Product extends BaseEntity {
         return name;
     }
 
-    /**
-     * 设置名称
-     *
-     * @param name 名称
-     */
     public void setName(String name) {
         this.name = name;
     }
 
-    /**
-     * 获取全称
-     *
-     * @return 全称
-     */
     @JsonProperty
     @Field(store = Store.YES, index = Index.NO)
     @Column(nullable = false)
@@ -526,20 +524,10 @@ public class Product extends BaseEntity {
         return fullName;
     }
 
-    /**
-     * 设置全称
-     *
-     * @param fullName 全称
-     */
     public void setFullName(String fullName) {
         this.fullName = fullName;
     }
 
-    /**
-     * 获取销售价
-     *
-     * @return 销售价
-     */
     @JsonProperty
     @Field(store = Store.YES, index = Index.YES, analyze = Analyze.NO)
     @NumericField
@@ -552,20 +540,10 @@ public class Product extends BaseEntity {
         return price;
     }
 
-    /**
-     * 设置销售价
-     *
-     * @param price 销售价
-     */
     public void setPrice(BigDecimal price) {
         this.price = price;
     }
 
-    /**
-     * 获取成本价
-     *
-     * @return 成本价
-     */
     @Min(0)
     @Digits(integer = 21, fraction = 2)
     @Column(precision = 21, scale = 2)
@@ -573,20 +551,10 @@ public class Product extends BaseEntity {
         return cost;
     }
 
-    /**
-     * 设置成本价
-     *
-     * @param cost 成本价
-     */
     public void setCost(BigDecimal cost) {
         this.cost = cost;
     }
 
-    /**
-     * 获取市场价
-     *
-     * @return 市场价
-     */
     @Field(store = Store.YES, index = Index.NO)
     @Min(0)
     @Digits(integer = 21, fraction = 2)
@@ -595,20 +563,10 @@ public class Product extends BaseEntity {
         return marketPrice;
     }
 
-    /**
-     * 设置市场价
-     *
-     * @param marketPrice 市场价
-     */
     public void setMarketPrice(BigDecimal marketPrice) {
         this.marketPrice = marketPrice;
     }
 
-    /**
-     * 获取展示图片
-     *
-     * @return 展示图片
-     */
     @JsonProperty
     @Field(store = Store.YES, index = Index.NO)
     @Length(max = 200)
@@ -616,20 +574,10 @@ public class Product extends BaseEntity {
         return image;
     }
 
-    /**
-     * 设置展示图片
-     *
-     * @param image 展示图片
-     */
     public void setImage(String image) {
         this.image = image;
     }
 
-    /**
-     * 获取单位
-     *
-     * @return 单位
-     */
     @JsonProperty
     @Field(store = Store.YES, index = Index.NO)
     @Length(max = 200)
@@ -637,99 +585,49 @@ public class Product extends BaseEntity {
         return unit;
     }
 
-    /**
-     * 设置单位
-     *
-     * @param unit 单位
-     */
     public void setUnit(String unit) {
         this.unit = unit;
     }
 
-    /**
-     * 获取重量
-     *
-     * @return 重量
-     */
     @Field(store = Store.YES, index = Index.NO)
     @Min(0)
     public Integer getWeight() {
         return weight;
     }
 
-    /**
-     * 设置重量
-     *
-     * @param weight 重量
-     */
     public void setWeight(Integer weight) {
         this.weight = weight;
     }
 
-    /**
-     * 获取库存
-     *
-     * @return 库存
-     */
     @Field(store = Store.YES, index = Index.NO)
     @Min(0)
     public Integer getStock() {
         return stock;
     }
 
-    /**
-     * 设置库存
-     *
-     * @param stock 库存
-     */
     public void setStock(Integer stock) {
         this.stock = stock;
     }
 
-    /**
-     * 获取已分配库存
-     *
-     * @return 已分配库存
-     */
     @Field(store = Store.YES, index = Index.NO)
     @Column(nullable = false)
     public Integer getAllocatedStock() {
         return allocatedStock;
     }
 
-    /**
-     * 设置已分配库存
-     *
-     * @param allocatedStock 已分配库存
-     */
     public void setAllocatedStock(Integer allocatedStock) {
         this.allocatedStock = allocatedStock;
     }
 
-    /**
-     * 获取库存备注
-     *
-     * @return 库存备注
-     */
     @Length(max = 200)
     public String getStockMemo() {
         return stockMemo;
     }
 
-    /**
-     * 设置库存备注
-     *
-     * @param stockMemo 库存备注
-     */
     public void setStockMemo(String stockMemo) {
         this.stockMemo = stockMemo;
     }
 
-    /**
-     * 获取赠送积分
-     *
-     * @return 赠送积分
-     */
     @Field(store = Store.YES, index = Index.NO)
     @Min(0)
     @Column(nullable = false)
@@ -737,20 +635,10 @@ public class Product extends BaseEntity {
         return point;
     }
 
-    /**
-     * 设置赠送积分
-     *
-     * @param point 赠送积分
-     */
     public void setPoint(Long point) {
         this.point = point;
     }
 
-    /**
-     * 获取是否上架
-     *
-     * @return 是否上架
-     */
     @Field(store = Store.YES, index = Index.YES, analyze = Analyze.NO)
     @NotNull
     @Column(nullable = false)
@@ -758,20 +646,10 @@ public class Product extends BaseEntity {
         return isMarketable;
     }
 
-    /**
-     * 设置是否上架
-     *
-     * @param isMarketable 是否上架
-     */
     public void setIsMarketable(Boolean isMarketable) {
         this.isMarketable = isMarketable;
     }
 
-    /**
-     * 获取是否列出
-     *
-     * @return 是否列出
-     */
     @Field(store = Store.YES, index = Index.YES, analyze = Analyze.NO)
     @NotNull
     @Column(nullable = false)
@@ -779,20 +657,10 @@ public class Product extends BaseEntity {
         return isList;
     }
 
-    /**
-     * 设置是否列出
-     *
-     * @param isList 是否列出
-     */
     public void setIsList(Boolean isList) {
         this.isList = isList;
     }
 
-    /**
-     * 获取是否置顶
-     *
-     * @return 是否置顶
-     */
     @NotNull
     @Column(nullable = false)
     @Field(store = Store.YES, index = Index.YES, analyze = Analyze.NO)
@@ -801,20 +669,10 @@ public class Product extends BaseEntity {
         return isTop;
     }
 
-    /**
-     * 设置是否置顶
-     *
-     * @param isTop 是否置顶
-     */
     public void setIsTop(Boolean isTop) {
         this.isTop = isTop;
     }
 
-    /**
-     * 获取是否为赠品
-     *
-     * @return 是否为赠品
-     */
     @JsonProperty
     @Field(store = Store.YES, index = Index.YES, analyze = Analyze.NO)
     @NotNull
@@ -823,70 +681,35 @@ public class Product extends BaseEntity {
         return isGift;
     }
 
-    /**
-     * 设置是否为赠品
-     *
-     * @param isGift 是否为赠品
-     */
     public void setIsGift(Boolean isGift) {
         this.isGift = isGift;
     }
 
-    /**
-     * 获取介绍
-     *
-     * @return 介绍
-     */
     @Field(store = Store.YES, index = Index.YES, analyzer = @Analyzer(impl = SmartChineseAnalyzer.class))
     @Lob
     public String getIntroduction() {
         return introduction;
     }
 
-    /**
-     * 设置介绍
-     *
-     * @param introduction 介绍
-     */
     public void setIntroduction(String introduction) {
         this.introduction = introduction;
     }
 
-    /**
-     * 获取备注
-     *
-     * @return 备注
-     */
     @Length(max = 200)
     public String getMemo() {
         return memo;
     }
 
-    /**
-     * 设置备注
-     *
-     * @param memo 备注
-     */
     public void setMemo(String memo) {
         this.memo = memo;
     }
 
-    /**
-     * 获取搜索关键词
-     *
-     * @return 搜索关键词
-     */
     @Field(store = Store.YES, index = Index.YES, analyzer = @Analyzer(impl = SmartChineseAnalyzer.class))
     @Length(max = 200)
     public String getKeyword() {
         return keyword;
     }
 
-    /**
-     * 设置搜索关键词
-     *
-     * @param keyword 搜索关键词
-     */
     public void setKeyword(String keyword) {
         if (keyword != null) {
             keyword = keyword.replaceAll("[,\\s]*,[,\\s]*", ",").replaceAll("^,|,$", "");
@@ -894,40 +717,20 @@ public class Product extends BaseEntity {
         this.keyword = keyword;
     }
 
-    /**
-     * 获取页面标题
-     *
-     * @return 页面标题
-     */
     @Length(max = 200)
     public String getSeoTitle() {
         return seoTitle;
     }
 
-    /**
-     * 设置页面标题
-     *
-     * @param seoTitle 页面标题
-     */
     public void setSeoTitle(String seoTitle) {
         this.seoTitle = seoTitle;
     }
 
-    /**
-     * 获取页面关键词
-     *
-     * @return 页面关键词
-     */
     @Length(max = 200)
     public String getSeoKeywords() {
         return seoKeywords;
     }
 
-    /**
-     * 设置页面关键词
-     *
-     * @param seoKeywords 页面关键词
-     */
     public void setSeoKeywords(String seoKeywords) {
         if (seoKeywords != null) {
             seoKeywords = seoKeywords.replaceAll("[,\\s]*,[,\\s]*", ",").replaceAll("^,|,$", "");
@@ -935,30 +738,15 @@ public class Product extends BaseEntity {
         this.seoKeywords = seoKeywords;
     }
 
-    /**
-     * 获取页面描述
-     *
-     * @return 页面描述
-     */
     @Length(max = 200)
     public String getSeoDescription() {
         return seoDescription;
     }
 
-    /**
-     * 设置页面描述
-     *
-     * @param seoDescription 页面描述
-     */
     public void setSeoDescription(String seoDescription) {
         this.seoDescription = seoDescription;
     }
 
-    /**
-     * 获取评分
-     *
-     * @return 评分
-     */
     @Field(store = Store.YES, index = Index.YES, analyze = Analyze.NO)
     @NumericField
     @Digits(integer = 1, fraction = 2)
@@ -967,635 +755,305 @@ public class Product extends BaseEntity {
         return score;
     }
 
-    /**
-     * 设置评分
-     *
-     * @param score 评分
-     */
     public void setScore(Float score) {
         this.score = score;
     }
 
-    /**
-     * 获取总评分
-     *
-     * @return 总评分
-     */
     @Column(nullable = false)
     public Long getTotalScore() {
         return totalScore;
     }
 
-    /**
-     * 设置总评分
-     *
-     * @param totalScore 总评分
-     */
     public void setTotalScore(Long totalScore) {
         this.totalScore = totalScore;
     }
 
-    /**
-     * 获取评分数
-     *
-     * @return 评分数
-     */
     @Field(store = Store.YES, index = Index.YES, analyze = Analyze.NO)
     @Column(nullable = false)
     public Long getScoreCount() {
         return scoreCount;
     }
 
-    /**
-     * 设置评分数
-     *
-     * @param scoreCount 评分数
-     */
     public void setScoreCount(Long scoreCount) {
         this.scoreCount = scoreCount;
     }
 
-    /**
-     * 获取点击数
-     *
-     * @return 点击数
-     */
     @Field(store = Store.YES, index = Index.YES, analyze = Analyze.NO)
     @Column(nullable = false)
     public Long getHits() {
         return hits;
     }
 
-    /**
-     * 设置点击数
-     *
-     * @param hits 点击数
-     */
     public void setHits(Long hits) {
         this.hits = hits;
     }
 
-    /**
-     * 获取周点击数
-     *
-     * @return 周点击数
-     */
     @Field(store = Store.YES, index = Index.NO)
     @Column(nullable = false)
     public Long getWeekHits() {
         return weekHits;
     }
 
-    /**
-     * 设置周点击数
-     *
-     * @param weekHits 周点击数
-     */
     public void setWeekHits(Long weekHits) {
         this.weekHits = weekHits;
     }
 
-    /**
-     * 获取月点击数
-     *
-     * @return 月点击数
-     */
     @Field(store = Store.YES, index = Index.NO)
     @Column(nullable = false)
     public Long getMonthHits() {
         return monthHits;
     }
 
-    /**
-     * 设置月点击数
-     *
-     * @param monthHits 月点击数
-     */
     public void setMonthHits(Long monthHits) {
         this.monthHits = monthHits;
     }
 
-    /**
-     * 获取销量
-     *
-     * @return 销量
-     */
     @Field(store = Store.YES, index = Index.YES, analyze = Analyze.NO)
     @Column(nullable = false)
     public Long getSales() {
         return sales;
     }
 
-    /**
-     * 设置销量
-     *
-     * @param sales 销量
-     */
     public void setSales(Long sales) {
         this.sales = sales;
     }
 
-    /**
-     * 获取周销量
-     *
-     * @return 周销量
-     */
     @Field(store = Store.YES, index = Index.NO)
     @Column(nullable = false)
     public Long getWeekSales() {
         return weekSales;
     }
 
-    /**
-     * 设置周销量
-     *
-     * @param weekSales 周销量
-     */
     public void setWeekSales(Long weekSales) {
         this.weekSales = weekSales;
     }
 
-    /**
-     * 获取月销量
-     *
-     * @return 月销量
-     */
     @Field(store = Store.YES, index = Index.NO)
     @Column(nullable = false)
     public Long getMonthSales() {
         return monthSales;
     }
 
-    /**
-     * 设置月销量
-     *
-     * @param monthSales 月销量
-     */
     public void setMonthSales(Long monthSales) {
         this.monthSales = monthSales;
     }
 
-    /**
-     * 获取周点击数更新日期
-     *
-     * @return 周点击数更新日期
-     */
     @Column(nullable = false)
     public Date getWeekHitsDate() {
         return weekHitsDate;
     }
 
-    /**
-     * 设置周点击数更新日期
-     *
-     * @param weekHitsDate 周点击数更新日期
-     */
     public void setWeekHitsDate(Date weekHitsDate) {
         this.weekHitsDate = weekHitsDate;
     }
 
-    /**
-     * 获取月点击数更新日期
-     *
-     * @return 月点击数更新日期
-     */
     @Column(nullable = false)
     public Date getMonthHitsDate() {
         return monthHitsDate;
     }
 
-    /**
-     * 设置月点击数更新日期
-     *
-     * @param monthHitsDate 月点击数更新日期
-     */
     public void setMonthHitsDate(Date monthHitsDate) {
         this.monthHitsDate = monthHitsDate;
     }
 
-    /**
-     * 获取周销量更新日期
-     *
-     * @return 周销量更新日期
-     */
     @Column(nullable = false)
     public Date getWeekSalesDate() {
         return weekSalesDate;
     }
 
-    /**
-     * 设置周销量更新日期
-     *
-     * @param weekSalesDate 周销量更新日期
-     */
     public void setWeekSalesDate(Date weekSalesDate) {
         this.weekSalesDate = weekSalesDate;
     }
 
-    /**
-     * 获取月销量更新日期
-     *
-     * @return 月销量更新日期
-     */
     @Column(nullable = false)
     public Date getMonthSalesDate() {
         return monthSalesDate;
     }
 
-    /**
-     * 设置月销量更新日期
-     *
-     * @param monthSalesDate 月销量更新日期
-     */
     public void setMonthSalesDate(Date monthSalesDate) {
         this.monthSalesDate = monthSalesDate;
     }
 
-    /**
-     * 获取商品属性值0
-     *
-     * @return 商品属性值0
-     */
     @Length(max = 200)
     public String getAttributeValue0() {
         return attributeValue0;
     }
 
-    /**
-     * 设置商品属性值0
-     *
-     * @param attributeValue0 商品属性值0
-     */
     public void setAttributeValue0(String attributeValue0) {
         this.attributeValue0 = attributeValue0;
     }
 
-    /**
-     * 获取商品属性值1
-     *
-     * @return 商品属性值1
-     */
     @Length(max = 200)
     public String getAttributeValue1() {
         return attributeValue1;
     }
 
-    /**
-     * 设置商品属性值1
-     *
-     * @param attributeValue1 商品属性值1
-     */
     public void setAttributeValue1(String attributeValue1) {
         this.attributeValue1 = attributeValue1;
     }
 
-    /**
-     * 获取商品属性值2
-     *
-     * @return 商品属性值2
-     */
     @Length(max = 200)
     public String getAttributeValue2() {
         return attributeValue2;
     }
 
-    /**
-     * 设置商品属性值2
-     *
-     * @param attributeValue2 商品属性值2
-     */
     public void setAttributeValue2(String attributeValue2) {
         this.attributeValue2 = attributeValue2;
     }
 
-    /**
-     * 获取商品属性值3
-     *
-     * @return 商品属性值3
-     */
     @Length(max = 200)
     public String getAttributeValue3() {
         return attributeValue3;
     }
 
-    /**
-     * 设置商品属性值3
-     *
-     * @param attributeValue3 商品属性值3
-     */
     public void setAttributeValue3(String attributeValue3) {
         this.attributeValue3 = attributeValue3;
     }
 
-    /**
-     * 获取商品属性值4
-     *
-     * @return 商品属性值4
-     */
     @Length(max = 200)
     public String getAttributeValue4() {
         return attributeValue4;
     }
 
-    /**
-     * 设置商品属性值4
-     *
-     * @param attributeValue4 商品属性值4
-     */
     public void setAttributeValue4(String attributeValue4) {
         this.attributeValue4 = attributeValue4;
     }
 
-    /**
-     * 获取商品属性值5
-     *
-     * @return 商品属性值5
-     */
     @Length(max = 200)
     public String getAttributeValue5() {
         return attributeValue5;
     }
 
-    /**
-     * 设置商品属性值5
-     *
-     * @param attributeValue5 商品属性值5
-     */
     public void setAttributeValue5(String attributeValue5) {
         this.attributeValue5 = attributeValue5;
     }
 
-    /**
-     * 获取商品属性值6
-     *
-     * @return 商品属性值6
-     */
     @Length(max = 200)
     public String getAttributeValue6() {
         return attributeValue6;
     }
 
-    /**
-     * 设置商品属性值6
-     *
-     * @param attributeValue6 商品属性值6
-     */
     public void setAttributeValue6(String attributeValue6) {
         this.attributeValue6 = attributeValue6;
     }
 
-    /**
-     * 获取商品属性值7
-     *
-     * @return 商品属性值7
-     */
     @Length(max = 200)
     public String getAttributeValue7() {
         return attributeValue7;
     }
 
-    /**
-     * 设置商品属性值7
-     *
-     * @param attributeValue7 商品属性值7
-     */
     public void setAttributeValue7(String attributeValue7) {
         this.attributeValue7 = attributeValue7;
     }
 
-    /**
-     * 获取商品属性值8
-     *
-     * @return 商品属性值8
-     */
     @Length(max = 200)
     public String getAttributeValue8() {
         return attributeValue8;
     }
 
-    /**
-     * 设置商品属性值8
-     *
-     * @param attributeValue8 商品属性值8
-     */
     public void setAttributeValue8(String attributeValue8) {
         this.attributeValue8 = attributeValue8;
     }
 
-    /**
-     * 获取商品属性值9
-     *
-     * @return 商品属性值9
-     */
     @Length(max = 200)
     public String getAttributeValue9() {
         return attributeValue9;
     }
 
-    /**
-     * 设置商品属性值9
-     *
-     * @param attributeValue9 商品属性值9
-     */
     public void setAttributeValue9(String attributeValue9) {
         this.attributeValue9 = attributeValue9;
     }
 
-    /**
-     * 获取商品属性值10
-     *
-     * @return 商品属性值10
-     */
     @Length(max = 200)
     public String getAttributeValue10() {
         return attributeValue10;
     }
 
-    /**
-     * 设置商品属性值10
-     *
-     * @param attributeValue10 商品属性值10
-     */
     public void setAttributeValue10(String attributeValue10) {
         this.attributeValue10 = attributeValue10;
     }
 
-    /**
-     * 获取商品属性值11
-     *
-     * @return 商品属性值11
-     */
     @Length(max = 200)
     public String getAttributeValue11() {
         return attributeValue11;
     }
 
-    /**
-     * 设置商品属性值11
-     *
-     * @param attributeValue11 商品属性值11
-     */
     public void setAttributeValue11(String attributeValue11) {
         this.attributeValue11 = attributeValue11;
     }
 
-    /**
-     * 获取商品属性值12
-     *
-     * @return 商品属性值12
-     */
     @Length(max = 200)
     public String getAttributeValue12() {
         return attributeValue12;
     }
 
-    /**
-     * 设置商品属性值12
-     *
-     * @param attributeValue12 商品属性值12
-     */
     public void setAttributeValue12(String attributeValue12) {
         this.attributeValue12 = attributeValue12;
     }
 
-    /**
-     * 获取商品属性值13
-     *
-     * @return 商品属性值13
-     */
     @Length(max = 200)
     public String getAttributeValue13() {
         return attributeValue13;
     }
 
-    /**
-     * 设置商品属性值13
-     *
-     * @param attributeValue13 商品属性值13
-     */
     public void setAttributeValue13(String attributeValue13) {
         this.attributeValue13 = attributeValue13;
     }
 
-    /**
-     * 获取商品属性值14
-     *
-     * @return 商品属性值14
-     */
     @Length(max = 200)
     public String getAttributeValue14() {
         return attributeValue14;
     }
 
-    /**
-     * 设置商品属性值14
-     *
-     * @param attributeValue14 商品属性值14
-     */
     public void setAttributeValue14(String attributeValue14) {
         this.attributeValue14 = attributeValue14;
     }
 
-    /**
-     * 获取商品属性值15
-     *
-     * @return 商品属性值15
-     */
     @Length(max = 200)
     public String getAttributeValue15() {
         return attributeValue15;
     }
 
-    /**
-     * 设置商品属性值15
-     *
-     * @param attributeValue15 商品属性值15
-     */
     public void setAttributeValue15(String attributeValue15) {
         this.attributeValue15 = attributeValue15;
     }
 
-    /**
-     * 获取商品属性值16
-     *
-     * @return 商品属性值16
-     */
     @Length(max = 200)
     public String getAttributeValue16() {
         return attributeValue16;
     }
 
-    /**
-     * 设置商品属性值16
-     *
-     * @param attributeValue16 商品属性值16
-     */
     public void setAttributeValue16(String attributeValue16) {
         this.attributeValue16 = attributeValue16;
     }
 
-    /**
-     * 获取商品属性值17
-     *
-     * @return 商品属性值17
-     */
     @Length(max = 200)
     public String getAttributeValue17() {
         return attributeValue17;
     }
 
-    /**
-     * 设置商品属性值17
-     *
-     * @param attributeValue17 商品属性值17
-     */
     public void setAttributeValue17(String attributeValue17) {
         this.attributeValue17 = attributeValue17;
     }
 
-    /**
-     * 获取商品属性值18
-     *
-     * @return 商品属性值18
-     */
     @Length(max = 200)
     public String getAttributeValue18() {
         return attributeValue18;
     }
 
-    /**
-     * 设置商品属性值18
-     *
-     * @param attributeValue18 商品属性值18
-     */
     public void setAttributeValue18(String attributeValue18) {
         this.attributeValue18 = attributeValue18;
     }
 
-    /**
-     * 获取商品属性值19
-     *
-     * @return 商品属性值19
-     */
     @Length(max = 200)
     public String getAttributeValue19() {
         return attributeValue19;
     }
 
-    /**
-     * 设置商品属性值19
-     *
-     * @param attributeValue19 商品属性值19
-     */
     public void setAttributeValue19(String attributeValue19) {
         this.attributeValue19 = attributeValue19;
     }
 
-    /**
-     * 获取商品分类
-     *
-     * @return 商品分类
-     */
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(nullable = false)
@@ -1603,59 +1061,29 @@ public class Product extends BaseEntity {
         return productCategory;
     }
 
-    /**
-     * 设置商品分类
-     *
-     * @param productCategory 商品分类
-     */
     public void setProductCategory(ProductCategory productCategory) {
         this.productCategory = productCategory;
     }
 
-    /**
-     * 获取货品
-     *
-     * @return 货品
-     */
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(nullable = false, updatable = false)
     public Goods getGoods() {
         return goods;
     }
 
-    /**
-     * 设置货品
-     *
-     * @param goods 货品
-     */
     public void setGoods(Goods goods) {
         this.goods = goods;
     }
 
-    /**
-     * 获取品牌
-     *
-     * @return 品牌
-     */
     @ManyToOne(fetch = FetchType.LAZY)
     public Brand getBrand() {
         return brand;
     }
 
-    /**
-     * 设置品牌
-     *
-     * @param brand 品牌
-     */
     public void setBrand(Brand brand) {
         this.brand = brand;
     }
 
-    /**
-     * 获取商品图片
-     *
-     * @return 商品图片
-     */
     @Valid
     @ElementCollection
     @CollectionTable(name = "xx_product_product_image")
@@ -1663,39 +1091,10 @@ public class Product extends BaseEntity {
         return productImages;
     }
 
-    /**
-     * 设置商品图片
-     *
-     * @param productImages 商品图片
-     */
     public void setProductImages(List<ProductImage> productImages) {
         this.productImages = productImages;
     }
 
-    /**
-     * 获取评论
-     *
-     * @return 评论
-     */
-    @OneToMany(mappedBy = "product", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
-    public Set<Review> getReviews() {
-        return reviews;
-    }
-
-    /**
-     * 设置评论
-     *
-     * @param reviews 评论
-     */
-    public void setReviews(Set<Review> reviews) {
-        this.reviews = reviews;
-    }
-
-    /**
-     * 获取标签
-     *
-     * @return 标签
-     */
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "xx_product_tag",
             joinColumns = {@JoinColumn(name = "product_id", referencedColumnName = "id")},
@@ -1705,20 +1104,10 @@ public class Product extends BaseEntity {
         return tags;
     }
 
-    /**
-     * 设置标签
-     *
-     * @param tags 标签
-     */
     public void setTags(Set<Tag> tags) {
         this.tags = tags;
     }
 
-    /**
-     * 获取规格
-     *
-     * @return 规格
-     */
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "xx_product_specification",
             joinColumns = {@JoinColumn(name = "product_id", referencedColumnName = "id")},
@@ -1728,20 +1117,10 @@ public class Product extends BaseEntity {
         return specifications;
     }
 
-    /**
-     * 设置规格
-     *
-     * @param specifications 规格
-     */
     public void setSpecifications(Set<Specification> specifications) {
         this.specifications = specifications;
     }
 
-    /**
-     * 获取规格值
-     *
-     * @return 规格值
-     */
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "xx_product_specification_value",
             joinColumns = {@JoinColumn(name = "product_id", referencedColumnName = "id")},
@@ -1751,109 +1130,78 @@ public class Product extends BaseEntity {
         return specificationValues;
     }
 
-    /**
-     * 设置规格值
-     *
-     * @param specificationValues 规格值
-     */
     public void setSpecificationValues(Set<SpecificationValue> specificationValues) {
         this.specificationValues = specificationValues;
     }
 
-    /**
-     * 获取促销
-     *
-     * @return 促销
-     */
     @ManyToMany(mappedBy = "products", fetch = FetchType.LAZY)
     public Set<Promotion> getPromotions() {
         return promotions;
     }
 
-    /**
-     * 设置促销
-     *
-     * @param promotions 促销
-     */
     public void setPromotions(Set<Promotion> promotions) {
         this.promotions = promotions;
     }
 
-    /**
-     * 获取购物车项
-     *
-     * @return 购物车项
-     */
     @OneToMany(mappedBy = "product", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     public Set<CartItem> getCartItems() {
         return cartItems;
     }
 
-    /**
-     * 设置购物车项
-     *
-     * @param cartItems 购物车项
-     */
     public void setCartItems(Set<CartItem> cartItems) {
         this.cartItems = cartItems;
     }
 
-    /**
-     * 获取订单项
-     *
-     * @return 订单项
-     */
     @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
     public Set<OrderItem> getOrderItems() {
         return orderItems;
     }
 
-    /**
-     * 设置订单项
-     *
-     * @param orderItems 订单项
-     */
     public void setOrderItems(Set<OrderItem> orderItems) {
         this.orderItems = orderItems;
     }
 
-    /**
-     * 获取赠品项
-     *
-     * @return 赠品项
-     */
     @OneToMany(mappedBy = "gift", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     public Set<GiftItem> getGiftItems() {
         return giftItems;
     }
 
-    /**
-     * 设置赠品项
-     *
-     * @param giftItems 赠品项
-     */
     public void setGiftItems(Set<GiftItem> giftItems) {
         this.giftItems = giftItems;
     }
 
-    /**
-     * 获取参数值
-     *
-     * @return 参数值
-     */
     @ElementCollection(fetch = FetchType.LAZY)
     @CollectionTable(name = "xx_product_parameter_value")
     public Map<Parameter, String> getParameterValue() {
         return parameterValue;
     }
 
-    /**
-     * 设置参数值
-     *
-     * @param parameterValue 参数值
-     */
     public void setParameterValue(Map<Parameter, String> parameterValue) {
         this.parameterValue = parameterValue;
+    }
+
+    public Mode getMode() {
+        return mode;
+    }
+
+    public void setMode(Mode mode) {
+        this.mode = mode;
+    }
+
+    public String getImageI() {
+        return imageI;
+    }
+
+    public void setImageI(String imageI) {
+        this.imageI = imageI;
+    }
+
+    public String getIntroductionB() {
+        return introductionB;
+    }
+
+    public void setIntroductionB(String introductionB) {
+        this.introductionB = introductionB;
     }
 
     /**
@@ -1924,7 +1272,7 @@ public class Product extends BaseEntity {
     @JsonProperty
     @Transient
     public String getPath() {
-        Map<String, Object> model = new HashMap<String, Object>();
+        Map<String, Object> model = new HashMap<>();
         model.put("id", getId());
         model.put("createDate", getCreateDate());
         model.put("modifyDate", getModifyDate());
@@ -1936,11 +1284,44 @@ public class Product extends BaseEntity {
         model.put("seoDescription", getSeoDescription());
         model.put("productCategory", getProductCategory());
         try {
-            return FreemarkerUtils.process(staticPath, model);
+            if (mode == Mode.single) {
+                return FreemarkerUtils.process(singleStaticPath, model);
+            } else {
+                return FreemarkerUtils.process(complexStaticPath, model);
+            }
         } catch (IOException | TemplateException e) {
             e.printStackTrace();
         }
         return null;
+    }
+
+    /**
+     * 获取访问路径
+     *
+     * @return 访问路径
+     */
+    @JsonIgnore
+    @Transient
+    public List<String> getAllPath() {
+        Map<String, Object> model = new HashMap<>();
+        model.put("id", getId());
+        model.put("createDate", getCreateDate());
+        model.put("modifyDate", getModifyDate());
+        model.put("sn", getSn());
+        model.put("name", getName());
+        model.put("fullName", getFullName());
+        model.put("seoTitle", getSeoTitle());
+        model.put("seoKeywords", getSeoKeywords());
+        model.put("seoDescription", getSeoDescription());
+        model.put("productCategory", getProductCategory());
+        List<String> paths = new ArrayList<>();
+        try {
+            paths.add(FreemarkerUtils.process(singleStaticPath, model));
+            paths.add(FreemarkerUtils.process(complexStaticPath, model));
+        } catch (IOException | TemplateException e) {
+            e.printStackTrace();
+        }
+        return paths;
     }
 
     /**

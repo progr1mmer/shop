@@ -167,11 +167,6 @@ $().ready(function() {
 							<a href="../order/list.html" target="iframe">${message("admin.main.order")}</a>
 						</dd>
 					[/@shiro.hasPermission]
-					[@shiro.hasPermission name="admin:apply"]
-						<dd>
-							<a href="../apply/list.html" target="iframe">${message("admin.main.apply")}</a>
-						</dd>
-					[/@shiro.hasPermission]
 					[@shiro.hasPermission name="admin:payment"]
 						<dd>
 							<a href="../payment/list.html" target="iframe">${message("admin.main.payment")}</a>

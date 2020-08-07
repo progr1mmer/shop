@@ -69,8 +69,6 @@ public class Variables {
     @Autowired
     private ProductCategoryChildrenListDirective productCategoryChildrenListDirective;
     @Autowired
-    private ReviewListDirective reviewListDirective;
-    @Autowired
     private PromotionListDirective promotionListDirective;
 
     @PostConstruct
@@ -97,7 +95,6 @@ public class Variables {
         configuration.setSharedVariable("product_category_root_list", productCategoryRootListDirective);
         configuration.setSharedVariable("product_category_parent_list", productCategoryParentListDirective);
         configuration.setSharedVariable("product_category_children_list", productCategoryChildrenListDirective);
-        configuration.setSharedVariable("review_list", reviewListDirective);
         configuration.setSharedVariable("promotion_list", promotionListDirective);
         configuration.setSharedVariable("shiro", new ShiroTags());
     }

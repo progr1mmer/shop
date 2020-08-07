@@ -1,0 +1,268 @@
+@charset "utf-8";
+
+.navbar-fixed-top .navbar-header {
+    float: left;
+}
+
+.navbar-fixed-top .navbar-brand {
+    font-size: 20px;
+    line-height: 50px;
+    padding: 0 15px;
+}
+
+.navbar-fixed-top .navbar-right {
+    float: right !important;
+    margin-right: 0;
+    font-size: 20px;
+}
+
+.navbar-fixed-top .navbar-right a {
+    margin-right: 10px;
+}
+
+.navbar-fixed-top .navbar-text {
+    margin: 10px 0;
+}
+
+.carousel-control.left, .carousel-control.right {
+    background-image: unset;
+}
+
+.row {
+    background-color: #f5f5f5;
+}
+
+.row>div {
+    float: left;
+    width: 100%;
+    padding-bottom: 10px;
+    background-color: #ffffff;
+}
+
+.col-xs-12 {
+    margin-top: 10px;
+}
+
+.basic {
+    border-radius: 0 0 12px 12px;
+}
+
+.basic .price .salePrice {
+    color: #ef0101;
+}
+
+.basic .price .salePrice>B {
+    font-size: 20px;
+}
+
+.basic .promotion>a {
+    padding: 1px 2px;
+    color: #ffffff;
+    background-color: #f07373;
+}
+
+.basic .name {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.basic .sn {
+    padding-top: 10px;
+}
+
+.basic .specification {
+    padding-top: 10px;
+    border-top: 1px solid #dddddd;
+}
+
+.basic .specification dl {
+    margin-bottom: 0;
+}
+
+.basic .specification dt {
+    padding-bottom: 5px;
+}
+
+.basic .specification dd {
+    display: inline-block;
+}
+
+.basic .specification dd a {
+    position: relative;
+    display: inline-block;
+    border: 1px solid #f5f5f5;
+    background-color: #f5f5f5;
+    padding: 3px 12px;
+    border-radius: 8px;
+    font-size: 13px;
+    margin: 0 8px 8px 0;
+    color: #555;
+    line-height: 24px;
+    text-align: center;
+    text-decoration: none;
+}
+
+.basic .specification .selected {
+    border-color: #FF0036;
+    color: #FF0036;
+    background-color: #FFF5F7;
+}
+
+.basic .specification .locked {
+    color: #cfcfcf;
+}
+
+.parameter, .details  {
+    border-radius: 12px;
+    margin-top: 10px;
+}
+
+.parameter table {
+    margin-bottom: unset;
+}
+
+.parameter .group {
+    border-top: unset;
+}
+
+.details {
+    margin-bottom: 10px;
+}
+
+.details .nav-tabs {
+    margin: 10px 0;
+    border-bottom: unset;
+}
+
+.details .nav-tabs>li {
+    width: 50%;
+    text-align: center;
+}
+
+.details .nav-tabs>li>a {
+    margin-right: unset;
+    padding: 5px 5px;
+    color: #333;
+    font-weight: 700;
+    display: inline;
+}
+
+.details .nav-tabs>li.disabled>a {
+    color: #777;
+}
+
+.details .nav-tabs>li>a:hover {
+    border-color: transparent;
+}
+
+.details .nav-tabs>li.active>a {
+    color: #FF0036;
+    border: 1px solid transparent;
+    border-bottom-color: #FF0036;
+}
+
+.navbar-fixed-bottom {
+    background-color: #ffffff;
+}
+
+.navbar-fixed-bottom .navbar-header {
+    float: left;
+    width: 50%;
+    text-align: center;
+}
+
+.navbar-fixed-bottom .navbar-brand {
+    font-size: 20px;
+    line-height: 50px;
+    padding: 0 15px;
+    width: 100%;
+}
+
+.navbar-fixed-bottom .btn-danger {
+    float: right;
+    width: 50%;
+    height: 50px;
+    border-radius: unset;
+    border-color: #FF0036;
+    background-color: #FF0036;
+}
+
+.navbar-fixed-bottom .listMenu {
+    display: flex;
+    display: -webkit-flex;
+    align-items: center;
+    text-align: center;
+    min-height: 50px;
+}
+
+.navbar-fixed-bottom .listMenu a {
+    flex-grow: 1;
+    -webkit-flex-grow: 1;
+    color: #777;
+    font-size: 0;
+}
+
+.navbar-fixed-bottom .listMenu a i {
+    font-size: 20px;
+}
+
+.navbar-fixed-bottom .listMenu a span {
+    font-size: 14px;
+}
+
+.index.carousel.slide {
+    background-color: #ffffff;
+    padding-top: 50px;
+    margin: 0 5px;
+}
+
+.index.result {
+    padding-bottom: 10px;
+    min-height: 450px;
+}
+
+.list.result {
+    padding-top: 50px;
+    padding-bottom: 10px;
+    min-height: 600px;
+}
+
+.result .line {
+    display: flex;
+    display: -webkit-flex;
+    align-items: flex-end;
+}
+
+.result .line a {
+    flex-grow: 1;
+    -webkit-flex-grow: 1;
+    background-color: #ffffff;
+    width: 50%;
+    padding: 5px;
+    margin-top: 10px;
+    text-decoration: none;
+    color: #333333;
+}
+
+.result .line a:first-child {
+    margin-left: 10px;
+    margin-right: 5px;
+}
+
+.result .line a:last-child {
+    margin-left: 5px;
+    margin-right: 10px;
+}
+
+.result .line a:only-child {
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+.result .price .salePrice {
+    color: #ef0101;
+}
+
+.result .price .salePrice span {
+    font-size: 16px;
+}

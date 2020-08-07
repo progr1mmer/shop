@@ -162,14 +162,6 @@ public interface ProductService extends BaseService<Product, Long> {
     Long count(Boolean isMarketable, Boolean isList, Boolean isTop, Boolean isGift, Boolean isOutOfStock, Boolean isStockAlert);
 
     /**
-     * 判断会员是否已购买该商品
-     *
-     * @param product 商品
-     * @return 是否已购买该商品
-     */
-    boolean isPurchased(Product product);
-
-    /**
      * 查看并更新点击数
      *
      * @param id ID

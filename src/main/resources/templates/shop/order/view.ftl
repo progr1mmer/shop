@@ -1,89 +1,18 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!DOCTYPE html>
+<html lang="zh_CN">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8" />
-<title>${message("shop.member.order.view")}[#if setting.isShowPowered] - ${setting.powered}[/#if]</title>
-<meta name="author" content="progr1mmer" />
-<link href="${base}/shop/css/common.css" rel="stylesheet" type="text/css" />
-<link href="${base}/shop/css/member.css" rel="stylesheet" type="text/css" />
-<script type="text/javascript" src="${base}/shop/js/jquery.js"></script>
-<script type="text/javascript" src="${base}/shop/js/common.js"></script>
-<script type="text/javascript">
-$().ready(function() {
-
-	var $dialogOverlay = $("#dialogOverlay");
-	var $dialog = $("#dialog");
-	var $close = $("#close");
-	var $deliveryContent = $("#deliveryContent");
-	var $cancel = $("#cancel");
-	var $deliveryQuery = $("a.deliveryQuery");
-
-	[@flash_message /]
-	
-	// 订单取消
-	$cancel.click(function() {
-		if (confirm("${message("shop.member.order.cancelConfirm")}")) {
-			$.ajax({
-				url: "cancel?sn=${order.sn}",
-				type: "POST",
-				dataType: "json",
-				cache: false,
-				success: function(message) {
-					if (message.type == "success") {
-						location.reload(true);
-					} else {
-						$.message(message);
-					}
-				}
-			});
-		}
-		return false;
-	});
-	
-	// 物流动态
-	$deliveryQuery.click(function() {
-		var $this = $(this);
-		$.ajax({
-			url: "delivery_query?sn=" + $this.attr("sn"),
-			type: "GET",
-			dataType: "json",
-			cache: true,
-			beforeSend: function() {
-				$dialog.show();
-				$dialogOverlay.show();
-				$deliveryContent.html("${message("shop.member.order.loading")}");
-			},
-			success: function(data) {
-				if (data.data != null) {
-					var html = '<table>';
-					$.each(data.data, function(i, item) {
-						html += '<tr><th>' + item.time + '<\/th><td>' + item.context + '<\/td><\/tr>';
-					});
-					html += '<\/table>';
-					$deliveryContent.html(html);
-				} else {
-					$deliveryContent.text(data.message);
-				}
-			}
-		});
-		return false;
-	});
-	
-	// 关闭物流动态
-	$close.click(function() {
-		$dialog.hide();
-		$dialogOverlay.hide();
-	});
-
-});
-</script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta name="author" content="progr1mmer" />
+	<title>${message("shop.member.order.view")}[#if setting.isShowPowered] - ${setting.powered}[/#if]</title>
+    <link href="${base}/shop/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
+    <link href="${base}/shop/css/common.css" rel="stylesheet" type="text/css" />
+    [#--<link href="${base}/shop/css/member.css" rel="stylesheet" type="text/css" />--]
 </head>
 <body>
 	<div id="dialogOverlay" class="dialogOverlay"></div>
 	[#assign current = "orderList" /]
-	[#include "/shop/include/header.ftl" /]
 	<div class="container member">
-		[#include "/shop/member/include/navigation.ftl" /]
 		<div class="span18 last">
 			<div class="input order">
 				<div id="dialog" class="dialog">
@@ -412,6 +341,78 @@ $().ready(function() {
 			</div>
 		</div>
 	</div>
-	[#include "/shop/include/footer.ftl" /]
+    [#include "/shop/include/footer.ftl" /]
+    <script type="text/javascript" src="${base}/shop/js/jquery.min.js"></script>
+    <script type="text/javascript" src="${base}/shop/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="${base}/shop/js/common.js"></script>
+    <script type="text/javascript">
+        $().ready(function() {
+
+            var $dialogOverlay = $("#dialogOverlay");
+            var $dialog = $("#dialog");
+            var $close = $("#close");
+            var $deliveryContent = $("#deliveryContent");
+            var $cancel = $("#cancel");
+            var $deliveryQuery = $("a.deliveryQuery");
+
+        [@flash_message /]
+
+            // 订单取消
+            $cancel.click(function() {
+                if (confirm("${message("shop.member.order.cancelConfirm")}")) {
+                    $.ajax({
+                        url: "cancel?sn=${order.sn}",
+                        type: "POST",
+                        dataType: "json",
+                        cache: false,
+                        success: function(message) {
+                            if (message.type == "success") {
+                                location.reload(true);
+                            } else {
+                                $.message(message);
+                            }
+                        }
+                    });
+                }
+                return false;
+            });
+
+            // 物流动态
+            $deliveryQuery.click(function() {
+                var $this = $(this);
+                $.ajax({
+                    url: "delivery_query?sn=" + $this.attr("sn"),
+                    type: "GET",
+                    dataType: "json",
+                    cache: true,
+                    beforeSend: function() {
+                        $dialog.show();
+                        $dialogOverlay.show();
+                        $deliveryContent.html("${message("shop.member.order.loading")}");
+                    },
+                    success: function(data) {
+                        if (data.data != null) {
+                            var html = '<table>';
+                            $.each(data.data, function(i, item) {
+                                html += '<tr><th>' + item.time + '<\/th><td>' + item.context + '<\/td><\/tr>';
+                            });
+                            html += '<\/table>';
+                            $deliveryContent.html(html);
+                        } else {
+                            $deliveryContent.text(data.message);
+                        }
+                    }
+                });
+                return false;
+            });
+
+            // 关闭物流动态
+            $close.click(function() {
+                $dialog.hide();
+                $dialogOverlay.hide();
+            });
+
+        });
+    </script>
 </body>
 </html>

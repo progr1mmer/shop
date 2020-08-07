@@ -105,7 +105,7 @@ public class CaptchaUtils {
      */
     private static void drawLine(BufferedImage image, Random random) {
         Graphics2D g2 = (Graphics2D) image.getGraphics();
-        int num = 3;
+        int num = 1;
         for (int i = 0; i < num; i++) {
             int x1 = random.nextInt(WIDTH);
             int y1 = random.nextInt(HEIGHT);

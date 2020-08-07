@@ -291,23 +291,6 @@ public class OrderServiceImpl extends BaseServiceImpl<Order, Long> implements Or
         orderLog.setOrder(order);
         orderLogDao.persist(orderLog);
 
-        /*Member member = cart.getMember();
-        if (order.getAmountPaid().compareTo(new BigDecimal(0)) > 0) {
-            memberDao.lock(member, LockModeType.PESSIMISTIC_WRITE);
-            member.setBalance(member.getBalance().subtract(order.getAmountPaid()));
-            memberDao.merge(member);
-
-            Deposit deposit = new Deposit();
-            deposit.setType(operator != null ? Deposit.Type.adminPayment : Deposit.Type.memberPayment);
-            deposit.setCredit(new BigDecimal(0));
-            deposit.setDebit(order.getAmountPaid());
-            deposit.setBalance(member.getBalance());
-            deposit.setOperator(operator != null ? operator.getUsername() : null);
-            deposit.setMember(member);
-            deposit.setOrder(order);
-            depositDao.persist(deposit);
-        }*/
-
         if (setting.getStockAllocationTime() == StockAllocationTime.order || (setting.getStockAllocationTime() == StockAllocationTime.payment && (order.getPaymentStatus() == PaymentStatus.partialPayment || order.getPaymentStatus() == PaymentStatus.paid))) {
             for (OrderItem orderItem : order.getOrderItems()) {
                 if (orderItem != null) {
@@ -405,15 +388,6 @@ public class OrderServiceImpl extends BaseServiceImpl<Order, Long> implements Or
                 orderDao.merge(order);
             }
         }
-
-        /*member.setAmount(member.getAmount().add(order.getAmountPaid()));
-        if (!member.getMemberRank().getIsSpecial()) {
-            MemberRank memberRank = memberRankDao.findByAmount(member.getAmount());
-            if (memberRank != null && memberRank.getAmount().compareTo(member.getMemberRank().getAmount()) > 0) {
-                member.setMemberRank(memberRank);
-            }
-        }
-        memberDao.merge(member);*/
 
         if (order.getIsAllocatedStock()) {
             for (OrderItem orderItem : order.getOrderItems()) {
@@ -521,22 +495,6 @@ public class OrderServiceImpl extends BaseServiceImpl<Order, Long> implements Or
 
         payment.setOrder(order);
         paymentDao.merge(payment);
-        /*if (payment.getMethod() == Payment.Method.deposit) {
-            Member member = order.getMember();
-            memberDao.lock(member, LockModeType.PESSIMISTIC_WRITE);
-            member.setBalance(member.getBalance().subtract(payment.getAmount()));
-            memberDao.merge(member);
-
-            Deposit deposit = new Deposit();
-            deposit.setType(operator != null ? Deposit.Type.adminPayment : Deposit.Type.memberPayment);
-            deposit.setCredit(new BigDecimal(0));
-            deposit.setDebit(payment.getAmount());
-            deposit.setBalance(member.getBalance());
-            deposit.setOperator(operator != null ? operator.getUsername() : null);
-            deposit.setMember(member);
-            deposit.setOrder(order);
-            depositDao.persist(deposit);
-        }*/
 
         Setting setting = SettingUtils.get();
         if (!order.getIsAllocatedStock() && setting.getStockAllocationTime() == StockAllocationTime.payment) {
@@ -583,22 +541,6 @@ public class OrderServiceImpl extends BaseServiceImpl<Order, Long> implements Or
 
         refunds.setOrder(order);
         refundsDao.persist(refunds);
-        /*if (refunds.getMethod() == Refunds.Method.deposit) {
-            Member member = order.getMember();
-            memberDao.lock(member, LockModeType.PESSIMISTIC_WRITE);
-            member.setBalance(member.getBalance().add(refunds.getAmount()));
-            memberDao.merge(member);
-
-            Deposit deposit = new Deposit();
-            deposit.setType(Deposit.Type.adminRefunds);
-            deposit.setCredit(refunds.getAmount());
-            deposit.setDebit(new BigDecimal(0));
-            deposit.setBalance(member.getBalance());
-            deposit.setOperator(operator != null ? operator.getUsername() : null);
-            deposit.setMember(member);
-            deposit.setOrder(order);
-            depositDao.persist(deposit);
-        }*/
 
         order.setAmountPaid(order.getAmountPaid().subtract(refunds.getAmount()));
         order.setExpire(null);

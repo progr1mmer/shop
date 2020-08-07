@@ -23,7 +23,7 @@ public class Message {
         /**
          * 警告
          */
-        warn,
+        warning,
 
         /**
          * 错误
@@ -88,7 +88,7 @@ public class Message {
      * @return 警告消息
      */
     public static Message warn(String content, Object... args) {
-        return new Message(Type.warn, content, args);
+        return new Message(Type.warning, content, args);
     }
 
     /**

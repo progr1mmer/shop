@@ -124,42 +124,8 @@ function message(code) {
 
 	var zIndex = 100;
 
-	// 检测登录
-	$.checkLogin = function() {
-		var result = false;
-		$.ajax({
-			url: shop.base + "/login/check",
-			type: "GET",
-			dataType: "json",
-			cache: false,
-			async: false,
-			success: function(data) {
-				result = data;
-			}
-		});
-		return result;
-	}
-
-	// 跳转登录
-	$.redirectLogin = function (redirectUrl, message) {
-		var href = shop.base + "/login.html";
-		if (redirectUrl != null) {
-			href += "?redirectUrl=" + encodeURIComponent(redirectUrl);
-		}
-		if (message != null) {
-			$.message("warn", message);
-			setTimeout(function() {
-				location.href = href;
-			}, 1000);
-		} else {
-			location.href = href;
-		}
-	}
-
 	// 消息框
-	var $message;
-	var messageTimer;
-	$.message = function() {
+	$.message = function(type, title) {
 		var message = {};
 		if ($.isPlainObject(arguments[0])) {
 			message = arguments[0];
@@ -169,28 +135,16 @@ function message(code) {
 		} else {
 			return false;
 		}
-		
-		if (message.type == null || message.content == null) {
-			return false;
-		}
-		
-		if ($message == null) {
-			$message = $('<div class="xxMessage"><div class="messageContent message' + message.type + 'Icon"><\/div><\/div>');
-			if (!window.XMLHttpRequest) {
-				$message.append('<iframe class="messageIframe"><\/iframe>');
-			}
-			$message.appendTo("body");
-		}
-		
-		$message.children("div").removeClass("messagewarnIcon messageerrorIcon messagesuccessIcon").addClass("message" + message.type + "Icon").html(message.content);
-		$message.css({"margin-left": - parseInt($message.outerWidth() / 2), "z-index": zIndex ++}).show();
-		
-		clearTimeout(messageTimer);
-		messageTimer = setTimeout(function() {
-			$message.hide();
-		}, 3000);
-		return $message;
-	}
+
+		swal({
+			position: 'center',
+			type: message.type,
+			title: message.content,
+			showConfirmButton: false,
+			timer: 3000,
+			toast: true
+		});
+	};
 
 	// 令牌	
 	$(document).ajaxSend(function(event, request, settings) {

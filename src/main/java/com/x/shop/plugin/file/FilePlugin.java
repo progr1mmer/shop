@@ -71,13 +71,11 @@ public class FilePlugin extends StoragePlugin {
 
     @Override
     public String getUrl(String path) {
-        Setting setting = SettingUtils.get();
-        return setting.getSiteUrl() + path;
+        return base + path;
     }
 
     @Override
     public List<FileInfo> browser(String path) {
-        Setting setting = SettingUtils.get();
         List<FileInfo> fileInfos = new ArrayList<>();
         File directory = new File(ContextPathUtils.getStaticPath(path));
         if (directory.exists() && directory.isDirectory()) {
@@ -86,7 +84,7 @@ public class FilePlugin extends StoragePlugin {
                 for (File file : files) {
                     FileInfo fileInfo = new FileInfo();
                     fileInfo.setName(file.getName());
-                    fileInfo.setUrl(setting.getSiteUrl() + path + file.getName());
+                    fileInfo.setUrl(base + path + file.getName());
                     fileInfo.setIsDirectory(file.isDirectory());
                     fileInfo.setSize(file.length());
                     fileInfo.setLastModified(new Date(file.lastModified()));
