@@ -476,7 +476,11 @@ public class Product extends BaseEntity {
 
     private String imageI;
 
+    private String nameB;
+
     private String introductionB;
+
+    private Admin creator;
 
     static {
         try {
@@ -1196,12 +1200,29 @@ public class Product extends BaseEntity {
         this.imageI = imageI;
     }
 
+    public String getNameB() {
+        return nameB;
+    }
+
+    public void setNameB(String nameB) {
+        this.nameB = nameB;
+    }
+
     public String getIntroductionB() {
         return introductionB;
     }
 
     public void setIntroductionB(String introductionB) {
         this.introductionB = introductionB;
+    }
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    public Admin getCreator() {
+        return creator;
+    }
+
+    public void setCreator(Admin creator) {
+        this.creator = creator;
     }
 
     /**

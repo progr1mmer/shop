@@ -13,7 +13,7 @@
 <body>
 	<div class="container-fluid">
 		<div class="row">
-            <div class="col-xs-12">
+            <div class="col-xs-12 col-sm-6 col-sm-offset-3">
                 <form id="orderForm" action="create.html" method="post">
                     <input type="hidden" name="cartToken" value="${cartToken}" />
 

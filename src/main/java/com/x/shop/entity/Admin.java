@@ -81,12 +81,17 @@ public class Admin extends BaseEntity {
     /**
      * 角色
      */
-    private Set<Role> roles = new HashSet<Role>();
+    private Set<Role> roles = new HashSet<>();
 
     /**
      * 订单
      */
-    private Set<Order> orders = new HashSet<Order>();
+    private Set<Order> orders = new HashSet<>();
+
+    /**
+     * 商品
+     */
+    private Set<Product> products = new HashSet<>();
 
     /**
      * 获取用户名
@@ -343,6 +348,15 @@ public class Admin extends BaseEntity {
      */
     public void setOrders(Set<Order> orders) {
         this.orders = orders;
+    }
+
+    @OneToMany(mappedBy = "creator", fetch = FetchType.LAZY)
+    public Set<Product> getProducts() {
+        return products;
+    }
+
+    public void setProducts(Set<Product> products) {
+        this.products = products;
     }
 
     /**

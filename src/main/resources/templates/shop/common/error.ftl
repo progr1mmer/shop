@@ -11,22 +11,26 @@
 </head>
 <body>
 	<div class="container-fluid">
-        <div class="error">
-            <div class="main">
-                <dl>
-                    <dt>${message("shop.error.message")}</dt>
-                    [#if message??]
-                        <dd>${content}</dd>
-                    [/#if]
-                    [#if constraintViolations?has_content]
-                        [#list constraintViolations as constraintViolation]
-                            <dd>[${constraintViolation.propertyPath}] ${constraintViolation.message}</dd>
-                        [/#list]
-                    [/#if]
-                    <dd>
-                        <a href="javascript:" onclick="window.history.back(); return false;">&gt;&gt; ${message("shop.error.back")}</a>
-                    </dd>
-                </dl>
+        <div class="row">
+            <div class="col-xs-12 col-sm-6 col-sm-offset-3">
+                <div class="error">
+                    <div class="main">
+                        <dl>
+                            <dt>${message("shop.error.message")}</dt>
+                            [#if message??]
+                                <dd>${content}</dd>
+                            [/#if]
+                            [#if constraintViolations?has_content]
+                                [#list constraintViolations as constraintViolation]
+                                    <dd>[${constraintViolation.propertyPath}] ${constraintViolation.message}</dd>
+                                [/#list]
+                            [/#if]
+                            <dd>
+                                <a href="javascript:" onclick="window.history.back(); return false;">&gt;&gt; ${message("shop.error.back")}</a>
+                            </dd>
+                        </dl>
+                    </div>
+                </div>
             </div>
         </div>
 	</div>

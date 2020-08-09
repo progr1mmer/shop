@@ -39,51 +39,51 @@
 <body>
     [#assign productCategory = product.productCategory /]
     <div class="container-fluid">
-        <div class="image" style="display: none">
-            <div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
-                [#if product.productImages?has_content]
-                    <!-- Indicators -->
-                    <ol class="carousel-indicators">
-                        [#list product.productImages as productImage]
-                            <li data-target="#carousel-example-generic" data-slide-to="${productImage_index}" [#if productImage_index == 0] class="active" [/#if] side="[#if productImage.isB]b[#else]a[/#if]"></li>
-                        [/#list]
-                    </ol>
-                    <!-- Wrapper for slides -->
-                    <div class="carousel-inner" role="listbox">
-                        [#list product.productImages as productImage]
-                            <div class="item [#if productImage_index == 0]active[/#if]" side="[#if productImage.isB]b[#else]a[/#if]">
-                                <img src="${productImage.large}" title="${productImage.title}" alt="${productImage.title}" width="100%"/>
-                            </div>
-                        [/#list]
-                    </div>
-                [#else]
-                    <!-- Indicators -->
-                    <ol class="carousel-indicators">
-                        <li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
-                    </ol>
-                    <!-- Wrapper for slides -->
-                    <div class="carousel-inner" role="listbox">
-                        <div class="item active">
-                            <img src="${setting.defaultLargeProductImage}" title="${setting.siteName}" alt="${setting.siteName}" width="100%" />
-                        </div>
-                    </div>
-                [/#if]
-
-                <!-- Controls -->
-                <a class="left carousel-control" href="#carousel-example-generic" role="button" data-slide="prev">
-                    <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
-                    <span class="sr-only">Previous</span>
-                </a>
-                <a class="right carousel-control" href="#carousel-example-generic" role="button" data-slide="next">
-                    <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
-                    <span class="sr-only">Next</span>
-                </a>
-            </div>
-        </div>
-
         <div class="row">
-            <div class="basic">
-                <div class="col-xs-12">
+            <div class="col-xs-12 col-sm-6 col-sm-offset-3">
+                <div class="image" style="display: none">
+                    <div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
+                        [#if product.productImages?has_content]
+                            <!-- Indicators -->
+                            <ol class="carousel-indicators">
+                                [#list product.productImages as productImage]
+                                    <li data-target="#carousel-example-generic" data-slide-to="${productImage_index}" [#if productImage_index == 0] class="active" [/#if] side="[#if productImage.isB]b[#else]a[/#if]"></li>
+                                [/#list]
+                            </ol>
+                            <!-- Wrapper for slides -->
+                            <div class="carousel-inner" role="listbox">
+                                [#list product.productImages as productImage]
+                                    <div class="item [#if productImage_index == 0]active[/#if]" side="[#if productImage.isB]b[#else]a[/#if]">
+                                        <img src="${productImage.large}" title="${productImage.title}" alt="${productImage.title}" width="100%"/>
+                                    </div>
+                                [/#list]
+                            </div>
+                        [#else]
+                            <!-- Indicators -->
+                            <ol class="carousel-indicators">
+                                <li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
+                            </ol>
+                            <!-- Wrapper for slides -->
+                            <div class="carousel-inner" role="listbox">
+                                <div class="item active">
+                                    <img src="${setting.defaultLargeProductImage}" title="${setting.siteName}" alt="${setting.siteName}" width="100%" />
+                                </div>
+                            </div>
+                        [/#if]
+
+                        <!-- Controls -->
+                        <a class="left carousel-control" href="#carousel-example-generic" role="button" data-slide="prev">
+                            <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+                            <span class="sr-only">Previous</span>
+                        </a>
+                        <a class="right carousel-control" href="#carousel-example-generic" role="button" data-slide="next">
+                            <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+                            <span class="sr-only">Next</span>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="basic">
                     <div class="price">
                         <span class="salePrice">
                             <small>${setting.currencySign}</small><B>${currency(product.price)}</B>
@@ -102,13 +102,14 @@
                             [/#list]
                         [/#if]
                     </div>
-                </div>
-                <div class="col-xs-12">
-                    <div class="name">
+
+                    <div class="name" style="display: none">
                         [#if product.brand?has_content]
-                            <span>${product.brand.name} | ${product.name}</span>
+                            <span side="a">${product.brand.name} | ${product.name}</span>
+                            <span side="b">${product.brand.name} | ${product.nameB}</span>
                         [#else]
-                            <span>${product.name}</span>
+                            <span side="a">${product.name}</span>
+                            <span side="b">${product.name}</span>
                         [/#if]
                     </div>
                     [#--<div class="name">${product.name}[#if product.isGift] [${message("shop.product.gifts")}][/#if]</div>--]
@@ -120,10 +121,9 @@
                             <div>${product.score?string("0.0")} (${message("Product.scoreCount")}: ${product.scoreCount})</div>
                         [/#if]
                     </div>
-                </div>
-                [#if !product.isGift]
-                    [#if product.specifications?has_content]
-                        <div class="col-xs-12">
+
+                    [#if !product.isGift]
+                        [#if product.specifications?has_content]
                             <div id="specification" class="specification">
                                 [#assign specificationValues = product.goods.specificationValues /]
                                 [#list product.specifications as specification]
@@ -147,14 +147,12 @@
                                     </dl>
                                 [/#list]
                             </div>
-                        </div>
+                        [/#if]
                     [/#if]
-                [/#if]
-            </div>
+                </div>
 
-            [#if product.parameterValue?has_content]
-                <div id="parameter" name="parameter" class="parameter">
-                    <div class="col-xs-12">
+                [#if product.parameterValue?has_content]
+                    <div id="parameter" name="parameter" class="parameter">
                         <div class="title">
                             <strong>${message("shop.product.parameter")}</strong>
                         </div>
@@ -174,32 +172,34 @@
                             [/#list]
                         </table>
                     </div>
-                </div>
-            [/#if]
+                [/#if]
 
-            [#if product.introduction?has_content || product.introductionB?has_content]
-                <div class="details">
-                    <div class="col-xs-8 col-xs-offset-2">
-                        <ul class="nav nav-tabs">
-                            <li role="presentation" class="title active"><a href="#introduction" aria-controls="introduction" role="tab" data-toggle="tab">${message("shop.product.introduction")}</a></li>
-                            <li role="presentation" class="title disabled"><a href="#consultation" aria-controls="consultation" role="tab" data-toggle="tab">${message("shop.product.consultation")}</a></li>
-                        </ul>
-                    </div>
-                    <div class="col-xs-12">
-                        <div class="tab-content">
-                            <div id="introduction" name="introduction" class="tab-pane fade in active" role="tabpanel" style="display: none">
-                                <div side="a">
-                                    ${product.introduction}
-                                </div>
-                                <div side="b">
-                                    ${product.introductionB}
+                [#if product.introduction?has_content || product.introductionB?has_content]
+                    <div class="details">
+                        <div class="row">
+                            <div class="col-xs-8 col-xs-offset-2">
+                                <ul class="nav nav-tabs">
+                                    <li role="presentation" class="title active"><a href="#introduction" aria-controls="introduction" role="tab" data-toggle="tab">${message("shop.product.introduction")}</a></li>
+                                    <li role="presentation" class="title disabled"><a href="#consultation" aria-controls="consultation" role="tab" data-toggle="tab">${message("shop.product.consultation")}</a></li>
+                                </ul>
+                            </div>
+                            <div class="col-xs-12">
+                                <div class="tab-content">
+                                    <div id="introduction" name="introduction" class="tab-pane fade in active" role="tabpanel" style="display: none">
+                                        <div side="a">
+                                            ${product.introduction}
+                                        </div>
+                                        <div side="b">
+                                            ${product.introductionB}
+                                        </div>
+                                    </div>
+                                    <div id="consultation" name="consultation" class="tab-pane fade in" role="tabpanel"></div>
                                 </div>
                             </div>
-                            <div id="consultation" name="consultation" class="tab-pane fade in" role="tabpanel"></div>
                         </div>
                     </div>
-                </div>
-            [/#if]
+                [/#if]
+            </div>
         </div>
     </div>
 
@@ -227,6 +227,7 @@
                     $('.image').toggle();
                 }
             }
+            $('.name').toggle();
             $('#introduction').toggle();
 
             var $specification = $("#specification dl");

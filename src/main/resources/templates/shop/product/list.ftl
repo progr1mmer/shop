@@ -41,36 +41,42 @@
         </div>
     </nav>
 
-    <div class="list result">
-        [#if page.content?has_content]
-            [#list page.content?chunk(2) as row]
-                <div class="line">
-                    [#list row as product]
-                        <a href="${base}${product.path}">
-                            <img src="[#if product.image??]${product.image}[#else]${setting.defaultThumbnailProductImage}[/#if]" width="100%" height="100%"/>
-                            <div class="text">
-                                <p title="${product.name}">${abbreviate(product.name, 20)}</p>
-                                <div class="price">
-                                    <span class="salePrice">
-                                        <small>${setting.currencySign}</small><span>${currency(product.price)}</span>
-                                    </span>
-                                    [#if setting.isShowMarketPrice]
-                                        <span class="marketPrice">
-                                            <small>${setting.currencySign}</small><del>${currency(product.marketPrice)}</del>
-                                        </span>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-xs-12 col-sm-6 col-sm-offset-3">
+                <div class="list result">
+                    [#if page.content?has_content]
+                        [#list page.content?chunk(2) as row]
+                            <div class="line">
+                                [#list row as product]
+                                    <a href="${base}${product.path}">
+                                        <img src="[#if product.image??]${product.image}[#else]${setting.defaultThumbnailProductImage}[/#if]" width="100%" height="100%"/>
+                                        <div class="text">
+                                            <p title="${product.name}">${abbreviate(product.name, 20)}</p>
+                                            <div class="price">
+                                                <span class="salePrice">
+                                                    <small>${setting.currencySign}</small><span>${currency(product.price)}</span>
+                                                </span>
+                                                [#if setting.isShowMarketPrice]
+                                                    <span class="marketPrice">
+                                                        <small>${setting.currencySign}</small><del>${currency(product.marketPrice)}</del>
+                                                    </span>
+                                                [/#if]
+                                            </div>
+                                        </div>
+                                    </a>
+                                    [#if !row_has_next]
+                                        <a href="javascript:" style="background-color: #f5f5f5"></a>
                                     [/#if]
-                                </div>
+                                [/#list]
                             </div>
-                        </a>
-                        [#if !row_has_next]
-                            <a href="javascript:" style="background-color: #f5f5f5"></a>
-                        [/#if]
-                    [/#list]
+                        [/#list]
+                    [#else]
+                        ${message("shop.product.noListResult")}
+                    [/#if]
                 </div>
-            [/#list]
-        [#else]
-            ${message("shop.product.noListResult")}
-        [/#if]
+            </div>
+        </div>
     </div>
 
     <nav class="navbar navbar-default navbar-fixed-bottom">

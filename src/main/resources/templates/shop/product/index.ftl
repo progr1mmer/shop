@@ -33,62 +33,67 @@
         </div>
     </nav>
 
-    <div id="carousel-example-generic" class="index carousel slide" data-ride="carousel">
-        [#if product.imageI?has_content]
-            <!-- Indicators -->
-            <ol class="carousel-indicators">
-                <li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
-            </ol>
-            <!-- Wrapper for slides -->
-            <div class="carousel-inner" role="listbox">
-                <div class="item active">
-                    <img src="${product.imageI}" title="${setting.siteName}" alt="${setting.siteName}" width="100%"/>
-                </div>
-            </div>
-        [#else]
-            <!-- Indicators -->
-            <ol class="carousel-indicators">
-                <li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
-            </ol>
-            <!-- Wrapper for slides -->
-            <div class="carousel-inner" role="listbox">
-                <div class="item active">
-                    <img src="${setting.defaultLargeProductImage}" title="${setting.siteName}" alt="${setting.siteName}" width="100%" />
-                </div>
-            </div>
-        [/#if]
-    </div>
-
-    <div class="index result">
-        [#if page.content?has_content]
-            [#list page.content?chunk(2) as row]
-                <div class="line">
-                    [#list row as product]
-                        <a href="${base}${product.path}">
-                            <img src="[#if product.image??]${product.image}[#else]${setting.defaultThumbnailProductImage}[/#if]" width="100%" height="100%"/>
-                            <div class="text">
-                                <p title="${product.name}">${abbreviate(product.name, 30)}</p>
-                                <div class="price">
-                                    <span class="salePrice">
-                                        <small>${setting.currencySign}</small><span>${currency(product.price)}</span>
-                                    </span>
-                                    [#if setting.isShowMarketPrice]
-                                        <span class="marketPrice">
-                                            <small>${setting.currencySign}</small><del>${currency(product.marketPrice)}</del>
-                                        </span>
-                                    [/#if]
-                                </div>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-xs-12 col-sm-6 col-sm-offset-3">
+                <div id="carousel-example-generic" class="index carousel slide" data-ride="carousel">
+                    [#if product.imageI?has_content]
+                        <!-- Indicators -->
+                        <ol class="carousel-indicators">
+                            <li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
+                        </ol>
+                        <!-- Wrapper for slides -->
+                        <div class="carousel-inner" role="listbox">
+                            <div class="item active">
+                                <img src="${product.imageI}" title="${setting.siteName}" alt="${setting.siteName}" width="100%"/>
                             </div>
-                        </a>
-                        [#if !row_has_next]
-                            <a href="javascript:" style="background-color: #f5f5f5"></a>
-                        [/#if]
-                    [/#list]
+                        </div>
+                    [#else]
+                        <!-- Indicators -->
+                        <ol class="carousel-indicators">
+                            <li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
+                        </ol>
+                        <!-- Wrapper for slides -->
+                        <div class="carousel-inner" role="listbox">
+                            <div class="item active">
+                                <img src="${setting.defaultLargeProductImage}" title="${setting.siteName}" alt="${setting.siteName}" width="100%" />
+                            </div>
+                        </div>
+                    [/#if]
                 </div>
-            [/#list]
-        [#else]
-            ${message("shop.product.noListResult")}
-        [/#if]
+                <div class="index result">
+                    [#if page.content?has_content]
+                        [#list page.content?chunk(2) as row]
+                            <div class="line">
+                                [#list row as product]
+                                    <a href="${base}${product.path}">
+                                        <img src="[#if product.image??]${product.image}[#else]${setting.defaultThumbnailProductImage}[/#if]" width="100%" height="100%"/>
+                                        <div class="text">
+                                            <p title="${product.name}">${abbreviate(product.name, 30)}</p>
+                                            <div class="price">
+                                                <span class="salePrice">
+                                                    <small>${setting.currencySign}</small><span>${currency(product.price)}</span>
+                                                </span>
+                                                [#if setting.isShowMarketPrice]
+                                                    <span class="marketPrice">
+                                                        <small>${setting.currencySign}</small><del>${currency(product.marketPrice)}</del>
+                                                    </span>
+                                                [/#if]
+                                            </div>
+                                        </div>
+                                    </a>
+                                    [#if !row_has_next]
+                                        <a href="javascript:" style="background-color: #f5f5f5"></a>
+                                    [/#if]
+                                [/#list]
+                            </div>
+                        [/#list]
+                    [#else]
+                        ${message("shop.product.noListResult")}
+                    [/#if]
+                </div>
+            </div>
+        </div>
     </div>
 
     <nav class="navbar navbar-default navbar-fixed-bottom">

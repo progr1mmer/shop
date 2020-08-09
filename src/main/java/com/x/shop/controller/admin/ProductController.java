@@ -53,6 +53,8 @@ public class ProductController extends BaseController {
     private SpecificationValueService specificationValueService;
     @Resource(name = "fileServiceImpl")
     private FileService fileService;
+    @Resource(name = "adminServiceImpl")
+    private AdminService adminService;
 
     /**
      * 检查编号是否唯一
@@ -120,6 +122,7 @@ public class ProductController extends BaseController {
                 }
             }
         }
+        product.setCreator(adminService.getCurrent());
         product.setProductCategory(productCategoryService.find(productCategoryId));
         product.setBrand(brandService.find(brandId));
         product.setTags(new HashSet<Tag>(tagService.findList(tagIds)));
@@ -293,6 +296,7 @@ public class ProductController extends BaseController {
         if (pProduct == null) {
             return ERROR_VIEW;
         }
+        product.setCreator(pProduct.getCreator());
         if (StringUtils.isNotEmpty(product.getSn()) && !productService.snUnique(pProduct.getSn(), product.getSn())) {
             return ERROR_VIEW;
         }

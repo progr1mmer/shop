@@ -51,36 +51,30 @@ public class ProductImageServiceImpl implements ProductImageService {
      * @param tempFile      原临时文件
      * @param contentType   原文件类型
      */
-    private void addTask(final String sourcePath, final String largePath, final String mediumPath, final String thumbnailPath, final File tempFile, final String contentType) {
+    private void addTask(StoragePlugin storagePlugin, final String sourcePath, final String largePath, final String mediumPath, final String thumbnailPath, final File tempFile, final String contentType) {
         try {
             taskExecutor.execute(() -> {
-                Collections.sort(storagePlugins);
-                for (StoragePlugin storagePlugin : storagePlugins) {
-                    if (storagePlugin.getIsEnabled()) {
-                        Setting setting = SettingUtils.get();
-                        String tempPath = System.getProperty("java.io.tmpdir");
-                        File watermarkFile = new File(ContextPathUtils.getStaticPath(setting.getWatermarkImage()));
-                        File largeTempFile = new File(tempPath + "/upload_" + UUID.randomUUID() + "." + DEST_EXTENSION);
-                        File mediumTempFile = new File(tempPath + "/upload_" + UUID.randomUUID() + "." + DEST_EXTENSION);
-                        File thumbnailTempFile = new File(tempPath + "/upload_" + UUID.randomUUID() + "." + DEST_EXTENSION);
-                        try {
-                            ImageUtils.zoom(tempFile, largeTempFile, setting.getLargeProductImageWidth(), setting.getLargeProductImageHeight());
-                            ImageUtils.addWatermark(largeTempFile, largeTempFile, watermarkFile, setting.getWatermarkPosition(), setting.getWatermarkAlpha());
-                            ImageUtils.zoom(tempFile, mediumTempFile, setting.getMediumProductImageWidth(), setting.getMediumProductImageHeight());
-                            ImageUtils.addWatermark(mediumTempFile, mediumTempFile, watermarkFile, setting.getWatermarkPosition(), setting.getWatermarkAlpha());
-                            ImageUtils.zoom(tempFile, thumbnailTempFile, setting.getThumbnailProductImageWidth(), setting.getThumbnailProductImageHeight());
-                            storagePlugin.upload(sourcePath, tempFile, contentType);
-                            storagePlugin.upload(largePath, largeTempFile, DEST_CONTENT_TYPE);
-                            storagePlugin.upload(mediumPath, mediumTempFile, DEST_CONTENT_TYPE);
-                            storagePlugin.upload(thumbnailPath, thumbnailTempFile, DEST_CONTENT_TYPE);
-                        } finally {
-                            FileUtils.deleteQuietly(tempFile);
-                            FileUtils.deleteQuietly(largeTempFile);
-                            FileUtils.deleteQuietly(mediumTempFile);
-                            FileUtils.deleteQuietly(thumbnailTempFile);
-                        }
-                        break;
-                    }
+                Setting setting = SettingUtils.get();
+                String tempPath = System.getProperty("java.io.tmpdir");
+                //File watermarkFile = new File(ContextPathUtils.getStaticPath(setting.getWatermarkImage()));
+                File largeTempFile = new File(tempPath + "/upload_" + UUID.randomUUID() + "." + DEST_EXTENSION);
+                File mediumTempFile = new File(tempPath + "/upload_" + UUID.randomUUID() + "." + DEST_EXTENSION);
+                File thumbnailTempFile = new File(tempPath + "/upload_" + UUID.randomUUID() + "." + DEST_EXTENSION);
+                try {
+                    ImageUtils.zoom(tempFile, largeTempFile, setting.getLargeProductImageWidth(), setting.getLargeProductImageHeight());
+                    //ImageUtils.addWatermark(largeTempFile, largeTempFile, watermarkFile, setting.getWatermarkPosition(), setting.getWatermarkAlpha());
+                    ImageUtils.zoom(tempFile, mediumTempFile, setting.getMediumProductImageWidth(), setting.getMediumProductImageHeight());
+                    //ImageUtils.addWatermark(mediumTempFile, mediumTempFile, watermarkFile, setting.getWatermarkPosition(), setting.getWatermarkAlpha());
+                    ImageUtils.zoom(tempFile, thumbnailTempFile, setting.getThumbnailProductImageWidth(), setting.getThumbnailProductImageHeight());
+                    storagePlugin.upload(sourcePath, tempFile, contentType);
+                    storagePlugin.upload(largePath, largeTempFile, DEST_CONTENT_TYPE);
+                    storagePlugin.upload(mediumPath, mediumTempFile, DEST_CONTENT_TYPE);
+                    storagePlugin.upload(thumbnailPath, thumbnailTempFile, DEST_CONTENT_TYPE);
+                } finally {
+                    FileUtils.deleteQuietly(tempFile);
+                    FileUtils.deleteQuietly(largeTempFile);
+                    FileUtils.deleteQuietly(mediumTempFile);
+                    FileUtils.deleteQuietly(thumbnailTempFile);
                 }
             });
         } catch (Exception e) {
@@ -111,11 +105,12 @@ public class ProductImageServiceImpl implements ProductImageService {
                             tempFile.getParentFile().mkdirs();
                         }
                         multipartFile.transferTo(tempFile);
-                        addTask(sourcePath, largePath, mediumPath, thumbnailPath, tempFile, multipartFile.getContentType());
+                        addTask(storagePlugin, sourcePath, largePath, mediumPath, thumbnailPath, tempFile, multipartFile.getContentType());
                         productImage.setSource(storagePlugin.getUrl(sourcePath));
                         productImage.setLarge(storagePlugin.getUrl(largePath));
                         productImage.setMedium(storagePlugin.getUrl(mediumPath));
                         productImage.setThumbnail(storagePlugin.getUrl(thumbnailPath));
+                        break;
                     }
                 }
             } catch (Exception e) {

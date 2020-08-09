@@ -1,27 +1,28 @@
 @charset "utf-8";
 
-.carousel-control.left, .carousel-control.right {
-    background-image: unset;
+.row>div>div {
+    margin-right: -15px;
+    margin-left: -15px;
+    margin-top: 10px;
+    background-color: #ffffff;
+    padding: 10px 15px;
 }
 
 .image {
-    margin-right: -15px;
-    margin-left: -15px;
-    background-color: #ffffff;
+    margin-top: unset !important;
+    padding: unset !important;
 }
 
-.row>div {
-    float: left;
-    width: 100%;
-    padding-bottom: 10px;
-    background-color: #ffffff;
+.image .carousel-control.left, .image .carousel-control.right {
+    background-image: unset;
 }
 
-.col-xs-12 {
-    margin-top: 10px;
+.image .carousel-indicators {
+    display: none;
 }
 
 .basic {
+    margin-top: unset !important;
     border-radius: 0 0 12px 12px;
 }
 
@@ -40,6 +41,7 @@
 }
 
 .basic .name {
+    margin-top: 10px;
     font-size: 18px;
     font-weight: bold;
 }
@@ -49,6 +51,7 @@
 }
 
 .basic .specification {
+    margin-top: 10px;
     padding-top: 10px;
     border-top: 1px solid #dddddd;
 }
@@ -137,6 +140,18 @@
     color: #FF0036;
     border: 1px solid transparent;
     border-bottom-color: #FF0036;
+}
+
+.details .tab-content {
+    margin: unset;
+    padding: 10px 0;
+}
+
+#introduction img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: 0 auto;
 }
 
 .navbar-fixed-bottom {

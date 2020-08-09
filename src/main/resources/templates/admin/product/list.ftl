@@ -303,6 +303,9 @@ $().ready(function() {
 				<th>
 					<a href="javascript:;" class="sort" name="isMarketable">${message("Product.isMarketable")}</a>
 				</th>
+                <th>
+                    <a href="javascript:;" class="sort" name="isMarketable">${message("Product.creator")}</a>
+                </th>
 				<th>
 					<a href="javascript:;" class="sort" name="createDate">${message("admin.common.createDate")}</a>
 				</th>
@@ -350,6 +353,9 @@ $().ready(function() {
 					<td>
 						<span class="${product.isMarketable?string("true", "false")}Icon">&nbsp;</span>
 					</td>
+                    <td>
+                        ${product.creator.name}
+                    </td>
 					<td>
 						<span title="${product.createDate?string("yyyy-MM-dd HH:mm:ss")}">${product.createDate}</span>
 					</td>

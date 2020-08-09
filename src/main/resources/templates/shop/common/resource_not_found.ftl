@@ -11,16 +11,20 @@
 </head>
 <body>
 	<div class="container-fluid">
-        <div class="error">
-			<div class="main">
-				<dl>
-					${message("shop.resourceNotFound.message")}
-					<dd>
-						<a href="javascript:" onclick="window.history.back(); return false;">&gt;&gt; ${message("shop.resourceNotFound.back")}</a>
-					</dd>
-				</dl>
-			</div>
-		</div>
+        <div class="row">
+            <div class="col-xs-12 col-sm-6 col-sm-offset-3">
+                <div class="error">
+                    <div class="main">
+                        <dl>
+                            ${message("shop.resourceNotFound.message")}
+                            <dd>
+                                <a href="javascript:" onclick="window.history.back(); return false;">&gt;&gt; ${message("shop.resourceNotFound.back")}</a>
+                            </dd>
+                        </dl>
+                    </div>
+                </div>
+            </div>
+        </div>
 	</div>
 	[#include "/shop/include/footer.ftl" /]
     <script type="text/javascript" src="${base}/shop/js/jquery.min.js"></script>

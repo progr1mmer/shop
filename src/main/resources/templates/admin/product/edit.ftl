@@ -409,6 +409,14 @@ $().ready(function() {
 					<input type="text" name="name" class="text" value="${product.name}" maxlength="200" />
 				</td>
 			</tr>
+            <tr>
+                <th>
+                    ${message("Product.name")}(${message("admin.product.bShow")}):
+                </th>
+                <td>
+                    <input type="text" name="nameB" class="text" value="${product.nameB}" maxlength="200" />
+                </td>
+            </tr>
 			<tr>
 				<th>
 					${message("Product.sn")}:
@@ -461,7 +469,7 @@ $().ready(function() {
 					<input type="text" name="marketPrice" class="text" value="${product.marketPrice}" maxlength="16" title="${message("admin.product.marketPriceTitle")}" />
 				</td>
 			</tr>
-			<tr>
+			[#--<tr>
 				<th>
 					${message("Product.image")}:
 				</th>
@@ -474,7 +482,7 @@ $().ready(function() {
 						[/#if]
 					</span>
 				</td>
-			</tr>
+			</tr>--]
             <tr>
                 <th>
                     ${message("admin.product.iShow")}(${message("admin.product.complexMode")}):

@@ -33,7 +33,7 @@ public class ProductController extends BaseController {
     @RequestMapping(value = "/{sn}/index.html", method = RequestMethod.GET)
     public String index(@PathVariable String sn, ModelMap model) {
         Product product = productService.findBySn(sn);
-        if (product == null) {
+        if (product == null || !product.getIsMarketable()) {
             return RESOURCE_NOT_FOUND_VIEW;
         }
         Page page =  new Page<>(Collections.singletonList(product), 1, new Pageable(1, 10));
@@ -48,7 +48,7 @@ public class ProductController extends BaseController {
     @RequestMapping(value = "/{sn}/list.html", method = RequestMethod.GET)
     public String list(@PathVariable String sn, ModelMap model) {
         Product product = productService.findBySn(sn);
-        if (product == null) {
+        if (product == null || !product.getIsMarketable()) {
             return RESOURCE_NOT_FOUND_VIEW;
         }
         Page page =  new Page<>(Collections.singletonList(product), 1, new Pageable(1, 10));
