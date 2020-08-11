@@ -474,6 +474,8 @@ public class Product extends BaseEntity {
 
     private Mode mode;
 
+    private String salesB;
+
     private String imageI;
 
     private String nameB;
@@ -1190,6 +1192,14 @@ public class Product extends BaseEntity {
 
     public void setMode(Mode mode) {
         this.mode = mode;
+    }
+
+    public String getSalesB() {
+        return salesB;
+    }
+
+    public void setSalesB(String salesB) {
+        this.salesB = salesB;
     }
 
     public String getImageI() {

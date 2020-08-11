@@ -456,17 +456,14 @@ $().ready(function() {
 					<input type="text" name="marketPrice" class="text" maxlength="16" title="${message("admin.product.marketPriceTitle")}" />
 				</td>
 			</tr>
-			[#--<tr>
-				<th>
-					${message("Product.image")}:
-				</th>
-				<td>
-					<span class="fieldSet">
-						<input type="text" name="image" class="text" maxlength="200" title="${message("admin.product.imageTitle")}" />
-						<input type="button" id="browserButton" class="button" value="${message("admin.browser.select")}" />
-					</span>
-				</td>
-			</tr>--]
+            <tr>
+                <th>
+					${message("Product.sales")}(${message("admin.product.bShow")}):
+                </th>
+                <td>
+                    <input type="text" name="salesB" class="text" maxlength="100" />
+                </td>
+            </tr>
             <tr>
                 <th>
                     ${message("admin.product.iShow")}(${message("admin.product.complexMode")}):

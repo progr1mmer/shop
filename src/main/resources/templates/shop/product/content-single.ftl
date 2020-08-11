@@ -93,12 +93,16 @@
                                 <small>${setting.currencySign}</small><del>${currency(product.marketPrice)}</del>
                             </span>
                         [/#if]
+                        [#if product.salesB?has_content]
+                            <em>${message("shop.product.salesb")} ${product.salesB} +</em>
+                        [/#if]
                     </div>
                     <div class="promotion">
                         [#if product.validPromotions?has_content]
                             [#list product.validPromotions as promotion]
                                 <a href="#" [#if promotion.beginDate?? || promotion.endDate??]
-                                   title="${promotion.beginDate} ~ ${promotion.endDate}" [/#if]>${promotion.name}</a>
+                                   title="${promotion.beginDate} ~ ${promotion.endDate}" [/#if]>${promotion.name}<span id="${promotion.id}"></span>
+                                </a>
                             [/#list]
                         [/#if]
                     </div>
@@ -121,6 +125,16 @@
                             <div>${product.score?string("0.0")} (${message("Product.scoreCount")}: ${product.scoreCount})</div>
                         [/#if]
                     </div>
+
+                    [#if product.tags?has_content]
+                        <div class="tag">
+                            [#list product.tags as tag]
+                                <span>
+                                    <i class="glyphicon glyphicon-ok-circle" aria-hidden="true"></i> <span>${tag.name}</span>
+                                </span>
+                            [/#list]
+                        </div>
+                    [/#if]
 
                     [#if !product.isGift]
                         [#if product.specifications?has_content]
@@ -237,6 +251,7 @@
             var $a_consultation = $('a[href="#consultation"]');
 
             var productMap = {};
+            var promotions = [];
             [@compress single_line = true]
                 productMap[${product.id}] = {
                     path: null,
@@ -254,7 +269,38 @@
                             [/#list]]
                     };
                 [/#list]
+                [#list product.validPromotions as promotion]
+                    promotions.push({
+                        id: ${promotion.id},
+                        endDate: '${promotion.endDate}'
+                    });
+                [/#list]
             [/@compress]
+
+            function countTime(item) {
+                var now = new Date();
+                if (item['endDate']) {
+                    var end = new Date(item['endDate'].replace(/-/g,'/'));
+                    var diff = end.getTime() - now.getTime();
+                    if (diff >= 0) {
+                        var h = Math.floor(diff / 1000 / 60 / 60);
+                        var m = Math.floor(diff / 1000 / 60 % 60);
+                        var s = Math.floor(diff / 1000 % 60);
+                        h = h < 10 ? ("0" + h) : h;
+                        m = m < 10 ? ("0" + m) : m;
+                        s = s < 10 ? ("0" + s) : s;
+                        var time = ' ' + h + ':' + m + ':' + s;
+                        $('#' + item['id']).text(time + '结束');
+                        setTimeout(countTime, 1000, item);
+                    } else {
+                        $('#' + item['id']).text(' 已结束');
+                    }
+                }
+            }
+
+            promotions.forEach(function (item) {
+                countTime(item);
+            });
 
             // 锁定规格值
             lockSpecificationValue();
@@ -372,7 +418,7 @@
             });
 
             $('.carousel').carousel({
-                interval: 2000
+                interval: 3000
             });
         });
     </script>

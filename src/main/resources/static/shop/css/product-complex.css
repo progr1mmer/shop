@@ -58,10 +58,19 @@
     font-size: 20px;
 }
 
+.basic .price em {
+    float: right;
+    color: #777777;
+}
+
 .basic .promotion>a {
     padding: 1px 2px;
     color: #ffffff;
     background-color: #f07373;
+}
+
+.basic .promotion>a>span {
+    font-size: 12px;
 }
 
 .basic .name {
@@ -72,6 +81,22 @@
 
 .basic .sn {
     padding-top: 10px;
+}
+
+.basic .tag {
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid #dddddd;
+    display: flex;
+    display: -webkit-flex;
+}
+
+.basic .tag>span {
+    margin-right: 10px;
+}
+
+.basic .tag>span>i {
+    color: #f07373;
 }
 
 .basic .specification {
