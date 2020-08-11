@@ -22,6 +22,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.math.BigDecimal;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Controller - 商品
@@ -115,7 +116,7 @@ public class ProductController extends BaseController {
                 iterator.remove();
                 continue;
             }
-            if (productImage.getFile() != null && !productImage.getFile().isEmpty()) {
+            if (redirectAttributes != null && productImage.getFile() != null && !productImage.getFile().isEmpty()) {
                 if (!fileService.isValid(FileType.image, productImage.getFile())) {
                     addFlashMessage(redirectAttributes, Message.error("admin.upload.invalid"));
                     return "redirect:add.html";
@@ -125,7 +126,7 @@ public class ProductController extends BaseController {
         product.setCreator(adminService.getCurrent());
         product.setProductCategory(productCategoryService.find(productCategoryId));
         product.setBrand(brandService.find(brandId));
-        product.setTags(new HashSet<Tag>(tagService.findList(tagIds)));
+        product.setTags(new HashSet<>(tagService.findList(tagIds)));
         if (!isValid(product)) {
             return ERROR_VIEW;
         }
@@ -168,29 +169,31 @@ public class ProductController extends BaseController {
             product.setImage(product.getThumbnail());
         }
 
-        for (ParameterGroup parameterGroup : product.getProductCategory().getParameterGroups()) {
-            for (Parameter parameter : parameterGroup.getParameters()) {
-                String parameterValue = request.getParameter("parameter_" + parameter.getId());
-                if (StringUtils.isNotEmpty(parameterValue)) {
-                    product.getParameterValue().put(parameter, parameterValue);
-                } else {
-                    product.getParameterValue().remove(parameter);
+        if (request != null) {
+            for (ParameterGroup parameterGroup : product.getProductCategory().getParameterGroups()) {
+                for (Parameter parameter : parameterGroup.getParameters()) {
+                    String parameterValue = request.getParameter("parameter_" + parameter.getId());
+                    if (StringUtils.isNotEmpty(parameterValue)) {
+                        product.getParameterValue().put(parameter, parameterValue);
+                    } else {
+                        product.getParameterValue().remove(parameter);
+                    }
                 }
             }
-        }
 
-        for (Attribute attribute : product.getProductCategory().getAttributes()) {
-            String attributeValue = request.getParameter("attribute_" + attribute.getId());
-            if (StringUtils.isNotEmpty(attributeValue)) {
-                product.setAttributeValue(attribute, attributeValue);
-            } else {
-                product.setAttributeValue(attribute, null);
+            for (Attribute attribute : product.getProductCategory().getAttributes()) {
+                String attributeValue = request.getParameter("attribute_" + attribute.getId());
+                if (StringUtils.isNotEmpty(attributeValue)) {
+                    product.setAttributeValue(attribute, attributeValue);
+                } else {
+                    product.setAttributeValue(attribute, null);
+                }
             }
         }
 
         Goods goods = new Goods();
         List<Product> products = new ArrayList<>();
-        if (specificationIds != null && specificationIds.length > 0) {
+        if (request != null && specificationIds != null && specificationIds.length > 0) {
             for (int i = 0; i < specificationIds.length; i++) {
                 Specification specification = specificationService.find(specificationIds[i]);
                 String[] specificationValueIds = request.getParameterValues("specification_" + specification.getId());
@@ -251,7 +254,9 @@ public class ProductController extends BaseController {
         goods.getProducts().clear();
         goods.getProducts().addAll(products);
         goodsService.save(goods);
-        addFlashMessage(redirectAttributes, SUCCESS_MESSAGE);
+        if (redirectAttributes != null) {
+            addFlashMessage(redirectAttributes, SUCCESS_MESSAGE);
+        }
         return "redirect:list.html";
     }
 
@@ -288,7 +293,7 @@ public class ProductController extends BaseController {
         }
         product.setProductCategory(productCategoryService.find(productCategoryId));
         product.setBrand(brandService.find(brandId));
-        product.setTags(new HashSet<Tag>(tagService.findList(tagIds)));
+        product.setTags(new HashSet<>(tagService.findList(tagIds)));
         if (!isValid(product)) {
             return ERROR_VIEW;
         }
@@ -338,7 +343,7 @@ public class ProductController extends BaseController {
         }
 
         Goods goods = pProduct.getGoods();
-        List<Product> products = new ArrayList<Product>();
+        List<Product> products = new ArrayList<>();
         if (specificationIds != null && specificationIds.length > 0) {
             for (int i = 0; i < specificationIds.length; i++) {
                 Specification specification = specificationService.find(specificationIds[i]);
@@ -450,6 +455,48 @@ public class ProductController extends BaseController {
     public @ResponseBody
     Message delete(Long[] ids) {
         productService.delete(ids);
+        return SUCCESS_MESSAGE;
+    }
+
+    /**
+     * 复制
+     */
+    @RequestMapping(value = "/copy", method = RequestMethod.POST)
+    public @ResponseBody
+    Message copy(Long[] ids) {
+        List<Product> products = productService.findList(ids);
+        products.forEach(product -> {
+            Product copy = new Product();
+            copy.setName(product.getName() + "_copy");
+            if (product.getNameB() != null) {
+                copy.setNameB(product.getNameB() + "_copy");
+            }
+            copy.setPrice(product.getPrice());
+            copy.setCost(product.getCost());
+            copy.setMarketPrice(product.getMarketPrice());
+            copy.setSalesB(product.getSalesB());
+            copy.setUnit(product.getUnit());
+            copy.setWeight(product.getWeight());
+            copy.setStock(product.getStock());
+            copy.setStockMemo(product.getStockMemo());
+            copy.setPoint(product.getPoint());
+            copy.setIsMarketable(product.getIsMarketable());
+            copy.setIsList(product.getIsList());
+            copy.setIsTop(product.getIsTop());
+            copy.setIsGift(product.getIsGift());
+            copy.setMemo(product.getMemo());
+            copy.setKeyword(product.getKeyword());
+            copy.setSeoTitle(product.getSeoTitle());
+            copy.setSeoKeywords(product.getSeoKeywords());
+            copy.setSeoDescription(product.getSeoDescription());
+            copy.setMode(product.getMode());
+            copy.setIntroduction(product.getIntroduction());
+            copy.setIntroductionB(product.getIntroductionB());
+            Long productCategoryId = product.getProductCategory().getId();
+            Long brandId = product.getBrand() != null ? product.getBrand().getId() : null;
+            Long [] tagIds = product.getTags() != null ? product.getTags().stream().map(BaseEntity::getId).collect(Collectors.toList()).toArray(new Long [product.getTags().size()]) : null;
+            save(copy, productCategoryId, brandId, tagIds, null, null, null);
+        });
         return SUCCESS_MESSAGE;
     }
 

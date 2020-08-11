@@ -3,6 +3,7 @@ $().ready( function() {
 	var $listForm = $("#listForm");
 	var $pageTotal = $("#pageTotal");
 	var $deleteButton = $("#deleteButton");
+	var $copyButton = $("#copyButton");
 	var $refreshButton = $("#refreshButton");
 	var $pageSizeSelect = $("#pageSizeSelect");
 	var $pageSizeOption = $("#pageSizeOption a");
@@ -52,6 +53,7 @@ $().ready( function() {
 							}
 						}
 						$deleteButton.addClass("disabled");
+						$copyButton.addClass("disabled");
 						$selectAll.prop("checked", false);
 						$checkedIds.prop("checked", false);
 					}
@@ -59,6 +61,42 @@ $().ready( function() {
 			}
 		});
 	});
+
+    // 复制
+    $copyButton.click( function() {
+        var $this = $(this);
+        if ($this.hasClass("disabled")) {
+            return false;
+        }
+        var $checkedIds = $("#listTable input[name='ids']:enabled:checked");
+        $.dialog({
+            type: "warn",
+            content: message("admin.dialog.copyConfirm"),
+            ok: message("admin.dialog.ok"),
+            cancel: message("admin.dialog.cancel"),
+            onOk: function() {
+                $.ajax({
+                    url: "copy",
+                    type: "POST",
+                    data: $checkedIds.serialize(),
+                    dataType: "json",
+                    cache: false,
+                    success: function(message) {
+                        $.message(message);
+                        if (message.type == "success") {
+                            setTimeout(function() {
+                                location.reload(true);
+                            }, 3000);
+                        }
+                        $deleteButton.addClass("disabled");
+                        $copyButton.addClass("disabled");
+                        $selectAll.prop("checked", false);
+                        $checkedIds.prop("checked", false);
+                    }
+                });
+            }
+        });
+    });
 	
 	// 刷新
 	$refreshButton.click( function() {
@@ -128,13 +166,16 @@ $().ready( function() {
 			$enabledIds.prop("checked", true);
 			if ($enabledIds.filter(":checked").size() > 0) {
 				$deleteButton.removeClass("disabled");
+                $copyButton.removeClass("disabled");
 				$contentRow.addClass("selected");
 			} else {
 				$deleteButton.addClass("disabled");
+                $copyButton.addClass("disabled");
 			}
 		} else {
 			$enabledIds.prop("checked", false);
 			$deleteButton.addClass("disabled");
+            $copyButton.addClass("disabled");
 			$contentRow.removeClass("selected");
 		}
 	});
@@ -145,12 +186,15 @@ $().ready( function() {
 		if ($this.prop("checked")) {
 			$this.closest("tr").addClass("selected");
 			$deleteButton.removeClass("disabled");
+			$copyButton.removeClass("disabled");
 		} else {
 			$this.closest("tr").removeClass("selected");
 			if ($("#listTable input[name='ids']:enabled:checked").size() > 0) {
 				$deleteButton.removeClass("disabled");
+                $copyButton.removeClass("disabled");
 			} else {
 				$deleteButton.addClass("disabled");
+                $copyButton.addClass("disabled");
 			}
 		}
 	});

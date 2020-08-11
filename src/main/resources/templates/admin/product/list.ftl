@@ -179,6 +179,9 @@ $().ready(function() {
 				<a href="javascript:;" id="deleteButton" class="iconButton disabled">
 					<span class="deleteIcon">&nbsp;</span>${message("admin.common.delete")}
 				</a>
+                <a href="javascript:;" id="copyButton" class="iconButton disabled">
+                    <span class="copyIcon">&nbsp;</span>${message("admin.common.copy")}
+                </a>
 				<a href="javascript:;" id="refreshButton" class="iconButton">
 					<span class="refreshIcon">&nbsp;</span>${message("admin.common.refresh")}
 				</a>

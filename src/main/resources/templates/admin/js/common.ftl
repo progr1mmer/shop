@@ -21,6 +21,7 @@ var messages = {
 	"admin.dialog.cancel": "${message("admin.dialog.cancel")}",
 	"admin.dialog.deleteConfirm": "${message("admin.dialog.deleteConfirm")}",
 	"admin.dialog.clearConfirm": "${message("admin.dialog.clearConfirm")}",
+	"admin.dialog.copyConfirm": "${message("admin.dialog.copyConfirm")}",
 	"admin.browser.title": "${message("admin.browser.title")}",
 	"admin.browser.upload": "${message("admin.browser.upload")}",
 	"admin.browser.parent": "${message("admin.browser.parent")}",

@@ -21,6 +21,7 @@ var messages = {
 	"admin.dialog.cancel": "取&nbsp;&nbsp;消",
 	"admin.dialog.deleteConfirm": "您确定要删除吗？",
 	"admin.dialog.clearConfirm": "您确定要清空吗？",
+	"admin.dialog.copyConfirm": "您确定要复制吗？",
 	"admin.browser.title": "选择文件",
 	"admin.browser.upload": "本地上传",
 	"admin.browser.parent": "上级目录",
