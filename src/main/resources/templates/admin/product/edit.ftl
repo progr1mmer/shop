@@ -471,7 +471,7 @@ $().ready(function() {
 			</tr>
             <tr>
                 <th>
-                    ${message("Product.sales")}(${message("admin.product.bShow")}):
+                    ${message("Product.sales")}(${message("shop.common.edit")}):
                 </th>
                 <td>
                     <input type="text" name="salesB" class="text" value="${product.salesB}" maxlength="100" />
